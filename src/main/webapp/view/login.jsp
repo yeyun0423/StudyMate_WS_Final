@@ -71,11 +71,11 @@
 
         .signup-link a {
             color: #777;
-            text-decoration: none;
+            text-decoration: underline;
         }
 
         .signup-link a:hover {
-            text-decoration: underline;
+            text-decoration: none;
         }
     </style>
 </head>
@@ -84,8 +84,8 @@
         <img src="<%= request.getContextPath() %>/resources/images/studymate_logo.png" alt="StudyMate Logo" class="logo">
         <h2>로그인</h2>
         <form action="loginProcess.jsp" method="post">
-            <input type="text" name="email" placeholder="이메일을 입력하세요" required>
-            <input type="password" name="password" placeholder="비밀번호를 입력하세요" required>
+            <input type="text" name="email" placeholder="이메일을 입력하세요" required title="이메일을 입력해주세요">
+            <input type="password" name="password" placeholder="비밀번호를 입력하세요" required title="비밀번호를 입력해주세요">
             <button type="submit" class="login-button">로그인</button>
         </form>
         <div class="signup-link">
