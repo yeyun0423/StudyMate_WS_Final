@@ -1,0 +1,10 @@
+ .timetable-cell {
+      height: 80px;
+      vertical-align: middle;
+      text-align: center;
+    }
+    .table thead th {
+      background-color: #0056b3;
+      color: white;
+      text-align: center;
+    }
