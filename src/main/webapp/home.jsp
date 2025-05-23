@@ -1,5 +1,4 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page contentType="text/html; charset=UTF-8" %>
 <%
     String userId = (String) session.getAttribute("userId");
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
@@ -92,8 +91,7 @@
 </script>
 
 <!-- 추천 친구/스터디 로직 JS -->
-<script src="js/home.js"></script>
-
+<script src="${pageContext.request.contextPath}/resources/js/home.js"></script>
 
 </body>
 </html>
