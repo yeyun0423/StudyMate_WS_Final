@@ -1,17 +1,14 @@
-<<<<<<< HEAD
-# Compiled class file
+# ========== Java 컴파일 파일 ==========
 *.class
-
-# Log file
 *.log
 
-# BlueJ files
+# ========== BlueJ 개발 환경 ==========
 *.ctxt
 
-# Mobile Tools for Java (J2ME)
+# ========== Java 모바일 (J2ME) ==========
 .mtj.tmp/
 
-# Package Files #
+# ========== 패키지 파일 ==========
 *.jar
 *.war
 *.nar
@@ -20,9 +17,25 @@
 *.tar.gz
 *.rar
 
-# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+# ========== Java VM 크래시 로그 ==========
 hs_err_pid*
 replay_pid*
-=======
+
+# ========== 빌드 디렉토리 ==========
 /build/
->>>>>>> 95f5aac (first commit)
+
+# ========== 이클립스 설정 파일 ==========
+.settings/
+.classpath
+.project
+
+# ========== IntelliJ IDEA (혹시 병행할 경우) ==========
+.idea/
+*.iml
+
+# ========== macOS, Windows OS 기본 숨김 파일 ==========
+.DS_Store
+Thumbs.db
+
+# ========== Git 충돌 마커 백업 ==========
+*.orig
