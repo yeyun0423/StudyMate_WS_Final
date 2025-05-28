@@ -1,4 +1,4 @@
-package controller; // 실제 패키지명으로 수정해줘
+package controller; 
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -28,7 +28,7 @@ public class StudyGroupServlet extends HttpServlet {
                 if (i < friends.size() - 1) sb.append(",");
             }
             sb.append("]");
-            response.getWriter().write(sb.toString()); // 간단한 JSON 배열 형태로 응답
+            response.getWriter().write(sb.toString()); 
         }
     }
 

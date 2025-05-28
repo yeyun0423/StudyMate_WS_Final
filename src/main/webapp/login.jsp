@@ -12,9 +12,12 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8">
     <title>StudyMate 로그인</title>
-    <link href="resources/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+   
+    
+ <%--   <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/bootstrap.min.css"> --%>
     <style>
         body {
             background-color: #f5f6fa;
@@ -25,18 +28,20 @@
             border-radius: 16px;
         }
     </style>
+
+    
 </head>
 <body class="d-flex justify-content-center align-items-center min-vh-100">
 
 <div class="card p-4 shadow-sm login-card">
     <!-- 로고 -->
     <div class="d-flex justify-content-center align-items-center mb-3" style="height: 160px;">
-        <img src="resources/images/studymate logo.png" alt="StudyMate Logo" class="img-fluid" style="max-height: 100%;">
+       <img src="<%= request.getContextPath() %>/resources/images/studymate logo.png" alt="StudyMate Logo" class="img-fluid" style="max-height: 100%;">
     </div>
 
     <!-- 로그인 타이틀 -->
     <h4 class="text-center fw-bold mb-4">로그인</h4>
-	
+
     <!-- 로그인 폼 -->
     <form action="login" method="post">
         <div class="mb-3">
@@ -54,6 +59,7 @@
     </p>
 </div>
 
-<script src="resources/js/bootstrap.bundle.min.js"></script>
+<!-- Bootstrap JS -->
+<script src="<%= request.getContextPath() %>/resources/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

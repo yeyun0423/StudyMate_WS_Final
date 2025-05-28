@@ -287,5 +287,43 @@ public class BoardPostDAO {
         }
 		return result > 0;
     }
+    
+    public List<BoardPostDTO> getQnaPostsWithStatus() {
+        List<BoardPostDTO> list = new ArrayList<>();
+        String sql = """
+            SELECT 
+                p.post_id,
+                p.writer_id,
+                u.name AS writer_name,
+                p.title,
+                p.created_at,
+                CASE 
+                    WHEN COUNT(r.reply_id) > 0 THEN '답변 완료'
+                    ELSE '대기중'
+                END AS status
+            FROM board_post p
+            LEFT JOIN board_reply r ON p.post_id = r.post_id
+            WHERE p.board_type = 'QNA'
+            GROUP BY p.post_id
+            ORDER BY p.created_at DESC
+            """;
 
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            
+            while (rs.next()) {
+                BoardPostDTO post = new BoardPostDTO();
+                post.setPostId(rs.getInt("post_id"));
+                post.setWriterId(rs.getString("writer_id"));
+                post.setTitle(rs.getString("title"));
+                post.setCreatedAt(rs.getTimestamp("created_at"));
+                post.setStatus(rs.getString("status"));
+                list.add(post);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 }

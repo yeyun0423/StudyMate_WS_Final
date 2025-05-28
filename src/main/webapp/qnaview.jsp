@@ -1,4 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import = "java.util.List" %>
 <%@ page import="dao.BoardPostDAO, dto.BoardPostDTO" %>
 <%
     int id = Integer.parseInt(request.getParameter("id"));
@@ -23,6 +24,9 @@
 <%
         return;
     }
+
+    // 댓글 목록 불러오기
+    List<BoardReplyDTO> replies = new BoardReplyDAO().getRepliesByPostId(post.getPostId());
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -47,17 +51,48 @@
 
     <hr>
 
-    <!-- ✅ 내용 칸을 테두리 안에 -->
+    <!-- ✅ 본문 내용 -->
     <div class="form-control bg-white" style="min-height: 100px;">
         <%= post.getContent().replaceAll("\n", "<br>") %>
     </div>
 
+    <!-- ✅ 댓글 목록 -->
+    <h5 class="mt-5 fw-bold">💬 댓글</h5>
+    <div class="border rounded p-3 bg-white">
+        <% if (replies.isEmpty()) { %>
+            <p class="text-muted">댓글이 없습니다.</p>
+        <% } else {
+            for (BoardReplyDTO r : replies) {
+        %>
+            <div class="mb-2">
+                <strong><%= r.getWriterId() %></strong> |
+                <small class="text-muted"><%= r.getCreatedAt().toString().substring(0, 16) %></small><br>
+                <div><%= r.getContent().replaceAll("\n", "<br>") %></div>
+            </div>
+            <hr>
+        <% } } %>
+    </div>
+
+    <!-- ✅ 관리자 전용 댓글 작성 -->
+    <% if (isAdmin) { %>
+    <form action="ReplyInsertServlet" method="post" class="mt-3">
+        <input type="hidden" name="postId" value="<%= post.getPostId() %>">
+        <input type="hidden" name="writerId" value="<%= loginUserId %>">
+        <div class="mb-2">
+            <textarea name="content" rows="3" class="form-control" placeholder="댓글을 입력하세요" required></textarea>
+        </div>
+        <div class="text-end">
+            <button type="submit" class="btn btn-primary btn-sm">댓글 등록</button>
+        </div>
+    </form>
+    <% } %>
+
+    <!-- ✅ 목록으로 돌아가기 -->
     <div class="mt-4 text-end">
         <a href="qnaboard.jsp" class="btn btn-secondary">목록으로</a>
     </div>
 </div>
 
-<script src="resources/js/lang.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

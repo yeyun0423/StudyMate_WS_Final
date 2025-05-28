@@ -21,9 +21,17 @@
 <fmt:setLocale value="<%= lang %>" />
 <fmt:setBundle basename="bundle.messages" />
 
+<style>
+  .logo-img {
+    height: 80px;
+    width: auto;
+  }
+</style>
+
+
 <!-- 로고 & 제목 -->
 <div class="d-flex align-items-center mb-3">
-    <img src="resources/images/studymate logo.png" alt="logo" class="logo-img me-3">
+    <img src="<%= request.getContextPath() %>/resources/images/studymate logo.png" alt="logo" class="logo-img me-3">
     <h1 class="fw-bold">StudyMate</h1>
 </div>
 
@@ -65,9 +73,9 @@
                         <fmt:message key="menuAdmin" />
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a id="menuUserList" class="dropdown-item" href="#"><fmt:message key="menuUserList" /></a></li>
+                        <li><a id="menuUserList" class="dropdown-item" href="user_list.jsp"><fmt:message key="menuUserList" /></a></li>
                         <li><a id="menuMatchList" class="dropdown-item" href="#"><fmt:message key="menuMatchList" /></a></li>
-                        <li><a id="menuQnaAnswer" class="dropdown-item" href="#"><fmt:message key="menuQnaAnswer" /></a></li>
+                        <li><a id="menuQnaAnswer" class="dropdown-item" href="qna_answer_list.jsp"><fmt:message key="menuQnaAnswer" /></a></li>
                     </ul>
                 </li>
             <% } %>
@@ -94,7 +102,7 @@
             <span id="welcomeText" class="fw-bold">
                 <%= userName != null ? userName + "님, " : "" %><fmt:message key="menuWelcome" />
             </span>
-            <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='login.jsp'">
+            <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='login.jsp'">로그아웃
             
             </button>
         </div>
@@ -106,4 +114,6 @@
     const userName = "<%= userName != null ? userName : "" %>";
 </script>
 
-<script src="resources/js/lang-toggle.js"></script>
+<!-- lang-toggle.js -->
+<script src="<%= request.getContextPath() %>/resources/js/lang-toggle.js"></script>
+

@@ -25,52 +25,43 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
-
 <div class="container py-4">
     <jsp:include page="navbar.jsp" />
 
-    <!-- 프로필 수정 폼 -->
-    <form action="updateProfile" method="post" enctype="multipart/form-data">
-        <div class="row mt-5">
-            <!-- 이미지 영역 -->
-            <div class="col-md-4 text-center">
-                <div class="mb-4" style="margin-top: 60px;">
-                    <img src="<%= request.getContextPath() %>/resources/images/<%= (profileImage != null && !profileImage.equals("")) ? profileImage : "default.png" %>"
-                         alt="프로필 이미지"
-                         class="img-thumbnail mb-3 rounded-circle"
-                         style="width: 200px; height: 200px; object-fit: cover;">
-                </div>
-
-                <!-- 이미지 업로드 -->
-<form action="profileUpload" method="post" enctype="multipart/form-data" id="uploadForm">
-    <div class="input-group">
-        <!-- 파일 선택 -->
-        <input type="file" class="form-control" id="profileImageInput" name="profileImage" required>
-        
-        <!-- 업로드 버튼 -->
-        <button type="submit" class="btn btn-outline-primary">
-            <i class="bi bi-upload"></i> 업로드
-        </button>
-    </div>
-
-    <!-- 유저 ID 전송용 -->
-    <input type="hidden" name="userId" value="<%= userId %>">
-</form>
-
-
-    <input type="hidden" name="userId" value="<%= userId %>">
-</form>
-
-                <input type="hidden" id="deleteImage" name="deleteImage" value="false">
-                <button type="button" class="btn btn-outline-danger btn-sm mt-2" onclick="markDeleteImage()" id="btnDeleteImage">
-                    현재 프로필 사진 삭제하기
-                </button>
-
-                <input type="hidden" name="userId" value="<%= userId %>">
+    <div class="row mt-5">
+        <!-- 이미지 영역 -->
+        <div class="col-md-4 text-center">
+            <div class="mb-4" style="margin-top: 60px;">
+               <img src="<%= request.getContextPath() %>/resources/images/<%= profileImage %>" 
+     alt="프로필 이미지" class="img-thumbnail rounded-circle"
+     style="width: 200px; height: 200px; object-fit: cover;">
+               
             </div>
 
-            <!-- 입력 필드 영역 -->
-            <div class="col-md-8">
+            <!-- 이미지 업로드 전용 폼 -->
+            <form action="<%= request.getContextPath() %>/profileUpload" method="post" enctype="multipart/form-data" class="mb-3">
+                <div class="input-group">
+                    <input type="file" class="form-control" id="profileImageInput" name="profileImage" required>
+                    <input type="hidden" name="userId" value="<%= userId %>">
+                    <button type="submit" class="btn btn-outline-primary">
+                        <i class="bi bi-upload"></i> 업로드
+                    </button>
+                </div>
+            </form>
+
+            <!-- 이미지 삭제 전용 폼 -->
+           <form action="<%= request.getContextPath() %>/deleteImage" method="post" onsubmit="return confirm('정말 프로필 이미지를 삭제하시겠습니까?');" class="mt-2">
+    <input type="hidden" name="userId" value="<%= userId %>">
+    <button type="submit" class="btn btn-outline-danger btn-sm mt-2">
+        현재 프로필 사진 삭제하기
+    </button>
+</form>
+           
+        </div>
+
+        <!-- 프로필 수정 영역 -->
+        <div class="col-md-8">
+            <form action="<%= request.getContextPath() %>/updateProfile" method="post">
                 <div class="mb-3">
                     <label>이름</label>
                     <input type="text" name="name" class="form-control" value="<%= user.getName() %>" placeholder="이름을 입력하세요.">
@@ -92,28 +83,22 @@
                     <input type="password" name="confirmPassword" class="form-control" placeholder="새 비밀번호를 다시 입력하세요">
                 </div>
 
-       
-                <div class="d-flex gap-2 mt-4 justify-content-end align-items-center">
-                    <!-- 저장 버튼 -->
-                    <button type="submit" class="btn btn-primary btn-sm px-4">저장</button>
-                </form> 
+                <input type="hidden" name="userId" value="<%= userId %>">
 
-                    <!-- 회원 탈퇴 버튼 -->
-                    <form action="deleteAccount" method="post" onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="m-0">
+                <!-- 저장 + 탈퇴 버튼을 나란히 배치 -->
+                <div class="d-flex gap-2 mt-4 justify-content-end align-items-center">
+                    <button type="submit" class="btn btn-primary btn-sm px-4">저장</button>
+
+                    <form action="<%= request.getContextPath() %>/deleteAccount" method="post" onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="m-0">
                         <input type="hidden" name="userId" value="<%= userId %>">
                         <button type="submit" class="btn btn-outline-danger btn-sm px-3">회원 탈퇴</button>
                     </form>
                 </div>
-            </div>
+            </form>
         </div>
+    </div>
 </div>
 
 <script src="<%= request.getContextPath() %>/resources/js/bootstrap.bundle.min.js"></script>
-<script>
-    function markDeleteImage() {
-        document.getElementById("deleteImage").value = "true";
-        alert("프로필 이미지 삭제가 설정되었습니다. '저장하기'를 눌러주세요.");
-    }
-</script>
 </body>
-</html> 
+</html>

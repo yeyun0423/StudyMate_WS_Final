@@ -12,6 +12,7 @@ public class BoardPostDTO {
     private String filename;       // 첨부파일 이름
     private Timestamp createdAt;   // 작성일시
     private boolean isPrivate;
+    private String status; // Q&A 답변 상태 
     
     public int getPostId() {
         return postId;
@@ -82,4 +83,10 @@ public class BoardPostDTO {
     public void setPrivate(boolean isPrivate) {
     	this.isPrivate = isPrivate;
     }
+    public String getStatus() {
+    	return status;
+    }
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

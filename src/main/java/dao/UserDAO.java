@@ -5,6 +5,8 @@ import util.DBUtil;
 import util.SHA256Util;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UserDAO {
 
@@ -168,6 +170,45 @@ public class UserDAO {
         return false;
     }
     
+    // 전체 유저 수 (페이징용)
+    public int getUserCount() {
+        String sql = "SELECT COUNT(*) FROM user";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    // 유저 목록 가져오기 (페이지당 5명)
+    public List<UserDTO> getUsersByPage(int page, int limit) {
+        List<UserDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM user ORDER BY join_date DESC LIMIT ? OFFSET ?";
+        int offset = (page - 1) * limit;
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, offset);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    UserDTO u = new UserDTO();
+                    u.setUserId(rs.getString("user_id"));
+                    u.setName(rs.getString("name"));
+                    u.setPassword(rs.getString("password"));
+                    u.setJoinDate(rs.getTimestamp("join_date"));
+                    list.add(u);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
     
 
 }

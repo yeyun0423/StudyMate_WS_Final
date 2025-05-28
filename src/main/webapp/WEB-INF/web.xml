@@ -133,7 +133,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>ProfileImageDeleteServlet</servlet-name>
-    <url-pattern>/profile-delete-image</url-pattern>
+    <url-pattern>/deleteImage</url-pattern>
   </servlet-mapping>
 
   <!-- JSP 서블릿 (파일 업로드 포함) -->
@@ -154,5 +154,20 @@
     <servlet-name>jsp</servlet-name>
     <url-pattern>*.jsp</url-pattern>
   </servlet-mapping>
+  
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+</servlet-mapping>
+  <mime-mapping>
+  
+  <extension>css</extension>
+  <mime-type>text/css</mime-type>
+</mime-mapping>
+<mime-mapping>
+  <extension>js</extension>
+  <mime-type>application/javascript</mime-type>
+</mime-mapping>
+  
 
 </web-app>
