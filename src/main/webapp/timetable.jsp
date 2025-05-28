@@ -2,9 +2,21 @@
 <%@ page import="dao.TimetableDAO, dto.TimetableDTO, java.util.*" %>
 <%
     String userId = (String) session.getAttribute("userId");
-    String userName = (String) session.getAttribute("userName");
+    String userName = null;
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
+    // 쿠키에서 user_name 값 가져오기
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie c : cookies) {
+            if ("user_name".equals(c.getName())) {
+                userName = c.getValue();
+                break;
+            }
+        }
+    }
+
+    // 로그인 여부 확인
     if (userId == null || userName == null) {
         response.sendRedirect("login.jsp");
         return;
@@ -27,6 +39,7 @@
         }
     }
 %>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>

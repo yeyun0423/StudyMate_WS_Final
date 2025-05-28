@@ -46,7 +46,6 @@ public class LoginServlet extends HttpServlet {
             // 세션 저장
             HttpSession session = request.getSession();
             session.setAttribute("userId", userId);
-            session.setAttribute("userName", name);
             session.setAttribute("isAdmin", isAdmin);
 
             // 쿠키 저장

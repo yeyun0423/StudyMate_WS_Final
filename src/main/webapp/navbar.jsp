@@ -102,9 +102,8 @@
             <span id="welcomeText" class="fw-bold">
                 <%= userName != null ? userName + "님, " : "" %><fmt:message key="menuWelcome" />
             </span>
-            <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='login.jsp'">로그아웃
-            
-            </button>
+           <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='logout'">로그아웃</button>
+           
         </div>
     </div>
 </nav>

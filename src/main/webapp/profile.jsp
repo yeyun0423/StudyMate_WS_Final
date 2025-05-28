@@ -3,9 +3,21 @@
 <%@ page import="dao.UserDAO" %>
 <%
     String userId = (String) session.getAttribute("userId");
-    String userName = (String) session.getAttribute("userName");
+    String userName = null;
     String profileImage = (String) session.getAttribute("profileImage");
 
+    //쿠키에서 user_name 값 가져오기
+    Cookie[] cookies = request.getCookies();
+    if (cookies != null) {
+        for (Cookie c : cookies) {
+            if ("user_name".equals(c.getName())) {
+                userName = c.getValue();
+                break;
+            }
+        }
+    }
+
+    // 로그인 안 된 경우 리다이렉트
     if (userId == null || userName == null) {
         response.sendRedirect("login.jsp");
         return;
@@ -17,6 +29,7 @@
         birthDateStr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(user.getBirthDate());
     }
 %>
+
 <html>
 <head>
     <title>프로필 수정</title>
