@@ -24,7 +24,6 @@ public class LoginServlet extends HttpServlet {
         boolean idExists = dao.checkIdExists(userId);
 
         if (!idExists) {
-            // 아이디가 존재하지 않는 경우
             out.println("<script>");
             out.println("if (confirm('존재하지 않는 회원입니다. 회원가입 하시겠습니까?')) {");
             out.println("  window.location.href = 'register.jsp';");
@@ -39,32 +38,30 @@ public class LoginServlet extends HttpServlet {
         boolean valid = dao.login(userId, password);
 
         if (valid) {
-            // 로그인 성공
             String name = dao.getNameById(userId);
             boolean isAdmin = dao.isAdmin(userId);
+            String profileImage = dao.getProfileImageById(userId); // ✅ 프로필 이미지 가져오기
 
-            // 세션 저장
             HttpSession session = request.getSession();
             session.setAttribute("userId", userId);
             session.setAttribute("isAdmin", isAdmin);
+            session.setAttribute("profileImage", profileImage); // ✅ 세션에 이미지 저장
 
-            // 쿠키 저장
             if (name != null) {
                 Cookie nameCookie = new Cookie("user_name", name);
-                nameCookie.setMaxAge(60 * 60 * 24 * 7); // 1주일
+                nameCookie.setMaxAge(60 * 60 * 24 * 7);
                 nameCookie.setPath("/");
                 response.addCookie(nameCookie);
             }
 
             Cookie langCookie = new Cookie("lang", "ko");
-            langCookie.setMaxAge(60 * 60 * 24 * 30); // 30일
+            langCookie.setMaxAge(60 * 60 * 24 * 30);
             langCookie.setPath("/");
             response.addCookie(langCookie);
 
             response.sendRedirect("home.jsp");
             System.out.println("로그인 성공 - home.jsp로 리다이렉트");
         } else {
-            // 아이디는 맞지만 비밀번호가 틀린 경우
             out.println("<script>");
             out.println("alert('아이디나 비밀번호가 틀렸습니다.');");
             out.println("window.location.href = 'login.jsp';");

@@ -6,7 +6,7 @@
     String userName = null;
     String profileImage = (String) session.getAttribute("profileImage");
 
-    //쿠키에서 user_name 값 가져오기
+    // 쿠키에서 user_name 가져오기
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
         for (Cookie c : cookies) {
@@ -23,12 +23,19 @@
         return;
     }
 
+    // fallback: 세션에 profileImage가 없으면 DB에서 다시 가져오기
+    if (profileImage == null || profileImage.isEmpty()) {
+        profileImage = new UserDAO().getProfileImageById(userId);
+        session.setAttribute("profileImage", profileImage); // 세션에 다시 저장
+    }
+
     UserDTO user = new UserDAO().getUserById(userId);
     String birthDateStr = "";
     if (user.getBirthDate() != null) {
         birthDateStr = new java.text.SimpleDateFormat("yyyy-MM-dd").format(user.getBirthDate());
     }
 %>
+
 
 <html>
 <head>

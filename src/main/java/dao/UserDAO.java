@@ -149,6 +149,26 @@ public class UserDAO {
             e.printStackTrace();
         }
     }
+    public String getProfileImageById(String userId) {
+        String profileImage = null;
+        String sql = "SELECT profile_image FROM user WHERE user_id = ?";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, userId);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                profileImage = rs.getString("profile_image");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return profileImage;
+    }
 
 
 
