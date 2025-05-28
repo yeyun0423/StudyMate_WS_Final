@@ -1,6 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import = "java.util.List" %>
 <%@ page import="dao.BoardPostDAO, dto.BoardPostDTO" %>
+<%@ page import="dao.BoardReplyDAO, dto.BoardReplyDTO" %>
 <%
     int id = Integer.parseInt(request.getParameter("id"));
     BoardPostDTO post = new BoardPostDAO().getPostById(id);

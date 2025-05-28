@@ -26,7 +26,7 @@ public class FriendRecommendationServlet extends HttpServlet {
 
         try (Connection conn = DBUtil.getConnection()) {
 
-            // ✅ 1. 본인이 해당 과목 스터디에 참여 중인지 확인
+            //  1. 본인이 해당 과목 스터디에 참여 중인지 확인
             String checkSql = """
                 SELECT 1 FROM study_member sm
                 JOIN study_group sg ON sm.group_id = sg.group_id
@@ -43,7 +43,7 @@ public class FriendRecommendationServlet extends HttpServlet {
                 }
             }
 
-            // ✅ 2. 추천 친구 조회 (같은 과목 timetable 등록자 중, 자신 제외)
+            //  2. 추천 친구 조회 (같은 과목 timetable 등록자 중, 자신 제외)
             String sql = """
                 SELECT DISTINCT u.user_id, u.name,
                        EXISTS (
@@ -78,7 +78,7 @@ public class FriendRecommendationServlet extends HttpServlet {
             e.printStackTrace();
         }
 
-        // ✅ 최종 JSON 응답: { "selfJoined": true/false, "friends": [ ... ] }
+        //  최종 JSON 응답: { "selfJoined": true/false, "friends": [ ... ] }
         String resultJson = String.format(
                 "{\"selfJoined\": %s, \"friends\": [%s]}",
                 selfJoined,

@@ -1,4 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page import="dao.TimetableDAO" %>
+<%@ page import="dto.TimetableDTO" %>
+<%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
@@ -21,6 +24,9 @@
         response.sendRedirect("login.jsp");
         return;
     }
+    TimetableDAO timetableDAO = new TimetableDAO();
+    List<TimetableDTO> subjectList = timetableDAO.getTimetableByUser(userId);
+    request.setAttribute("subjectList", subjectList);
 %>
 
 <html>
@@ -43,18 +49,14 @@
     <div class="d-flex flex-wrap gap-3 align-items-center mb-4">
         <select class="form-select w-auto" id="subjectSelect" onchange="fetchRecommendedFriends()">
             <option selected disabled id="optionSubjectDefault"><fmt:message key="home.subject.select" /></option>
-            <option value="db"><fmt:message key="subject.1"/></option>
-            <option value="web"><fmt:message key="subject.2"/></option>
-            <option value="network"><fmt:message key="subject.3"/></option>
-            <option value="ds"><fmt:message key="subject.4"/></option>
-            <option value="linux"><fmt:message key="subject.5"/></option>
-            <option value="spring"><fmt:message key="subject.6"/></option>
-            <option value="java"><fmt:message key="subject.7"/></option>
+            <c:forEach var="subject" items="${subjectList}">
+                <option value="${subject.subject}">${subject.subject}</option>
+            </c:forEach>
         </select>
 
         <div class="d-flex align-items-center gap-2">
             <button class="btn btn-outline-secondary" onclick="decreaseMember()">-</button>
-            <span id="memberCount" class="fw-bold fs-5">1</span>
+            <span id="memberCount" class="fw-bold fs-5">2</span>
             <button class="btn btn-outline-secondary" onclick="increaseMember()">+</button>
         </div>
     </div>
@@ -88,13 +90,9 @@
                         <label for="randomSubject" class="form-label"><fmt:message key="home.subject.select" /></label>
                         <select class="form-select" id="randomSubject">
                             <option selected disabled id="optionSubjectDefault"><fmt:message key="home.subject.select" /></option>
-                            <option value="db"><fmt:message key="subject.1"/></option>
-                            <option value="web"><fmt:message key="subject.2"/></option>
-                            <option value="network"><fmt:message key="subject.3"/></option>
-                            <option value="ds"><fmt:message key="subject.4"/></option>
-                            <option value="linux"><fmt:message key="subject.5"/></option>
-                            <option value="spring"><fmt:message key="subject.6"/></option>
-                            <option value="java"><fmt:message key="subject.7"/></option>
+                            <c:forEach var="subject" items="${subjectList}">
+                                <option value="${subject.subject}">${subject.subject}</option>
+                            </c:forEach>
                         </select>
                     </div>
                     <div class="mb-3">
