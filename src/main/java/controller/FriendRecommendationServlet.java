@@ -9,7 +9,6 @@ import java.io.PrintWriter;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import util.DBUtil;
 
 @WebServlet("/getRecommendedFriends")
@@ -73,7 +72,7 @@ public class FriendRecommendationServlet extends HttpServlet {
                         friendsJsonList.add(friendJson);
                     }
                 }
-            }
+            }	
 
         } catch (Exception e) {
             e.printStackTrace();

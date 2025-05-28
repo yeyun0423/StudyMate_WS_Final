@@ -1,5 +1,5 @@
 let memberCount = 1;
-let recommendedFriendCount = 0;  // 체크 가능한 친구 수 (참여중인 친구 제외)
+let recommendedFriendCount = 0;  
 
 function increaseMember() {
     const maxAllowed = recommendedFriendCount + 1;
