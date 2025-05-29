@@ -1,65 +1,103 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%
-    String msg = request.getParameter("message");
-    if ("deleted".equals(msg)) {
-%>
-<script>
-    alert("회원 탈퇴가 완료되었습니다.");
-</script>
-<%
-    }
-%>
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+    <meta charset="UTF-8">
     <title>StudyMate 로그인</title>
-    <!-- Bootstrap CSS -->
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-   
-    
- <%--   <link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/bootstrap.min.css"> --%>
+    <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+
     <style>
-        body {
-            background-color: #f5f6fa;
+        * {
+            font-family: 'SUIT', sans-serif;
         }
+
+        body {
+            background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
         .login-card {
+            background: #ffffff;
+            padding: 40px 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
             width: 100%;
             max-width: 420px;
-            border-radius: 16px;
+        }
+
+        .logo-wrapper {
+            height: 100px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-wrapper img {
+            max-height: 100%;
+        }
+
+        .form-control {
+            border-radius: 12px;
+            height: 48px;
+        }
+
+        .btn-primary {
+            border-radius: 12px;
+            height: 48px;
+            font-weight: 600;
+            background-color: #4f46e5;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+
+        .form-text a {
+            color: #4f46e5;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .form-text a:hover {
+            text-decoration: underline;
         }
     </style>
-
-    
 </head>
-<body class="d-flex justify-content-center align-items-center min-vh-100">
 
-<div class="card p-4 shadow-sm login-card">
-    <!-- 로고 -->
-    <div class="d-flex justify-content-center align-items-center mb-3" style="height: 160px;">
-       <img src="<%= request.getContextPath() %>/resources/images/studymate logo.png" alt="StudyMate Logo" class="img-fluid" style="max-height: 100%;">
+<body>
+    <div class="login-card">
+        <!-- 로고 -->
+        <div class="logo-wrapper">
+            <img src="<%= request.getContextPath() %>/resources/images/studymate logo.png" alt="StudyMate Logo" />
+        </div>
+
+        <!-- 로그인 타이틀 -->
+        <h4 class="text-center fw-bold mb-4">로그인</h4>
+
+        <!-- 로그인 폼 -->
+        <form action="login" method="post">
+            <div class="mb-3">
+                <input type="text" name="userId" class="form-control" placeholder="아이디를 입력해주세요." required>
+            </div>
+            <div class="mb-3">
+                <input type="password" name="password" class="form-control" placeholder="비밀번호를 입력해주세요." required>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">로그인</button>
+        </form>
+
+        <!-- 회원가입 링크 -->
+        <p class="form-text text-center mt-4">
+            계정이 없으신가요? <a href="register.jsp">회원가입</a>
+        </p>
     </div>
 
-    <!-- 로그인 타이틀 -->
-    <h4 class="text-center fw-bold mb-4">로그인</h4>
-
-    <!-- 로그인 폼 -->
-    <form action="login" method="post">
-        <div class="mb-3">
-            <input type="text" name="userId" class="form-control" placeholder="아이디를 입력하세요." required>
-        </div>
-        <div class="mb-3">
-            <input type="password" name="password" class="form-control" placeholder="비밀번호를 입력하세요." required>
-        </div>
-        <button type="submit" class="btn btn-primary w-100 fw-bold">로그인</button>
-    </form>
-
-    <!-- 회원가입 링크 -->
-    <p class="text-center mt-3 mb-0" style="font-size: 14px;">
-        회원이 아니신가요? <a href="register.jsp" class="text-decoration-none fw-semibold text-primary">회원가입</a>
-    </p>
-</div>
-
-<!-- Bootstrap JS -->
-<script src="<%= request.getContextPath() %>/resources/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -44,6 +44,7 @@ public class LoginServlet extends HttpServlet {
 
             HttpSession session = request.getSession();
             session.setAttribute("userId", userId);
+            session.setAttribute("userName", name);
             session.setAttribute("isAdmin", isAdmin);
             session.setAttribute("profileImage", profileImage); // ✅ 세션에 이미지 저장
 

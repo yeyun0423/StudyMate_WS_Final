@@ -5,7 +5,6 @@
     String userName = null;
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
-    // 쿠키에서 user_name 값 가져오기
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
         for (Cookie c : cookies) {
@@ -16,7 +15,6 @@
         }
     }
 
-    // 로그인 여부 확인
     if (userId == null || userName == null) {
         response.sendRedirect("login.jsp");
         return;
@@ -39,30 +37,53 @@
         }
     }
 %>
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>StudyMate - 시간표</title>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="<%= request.getContextPath() %>/resources/css/home.css?v=1">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'SUIT', sans-serif; }
+        body { background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff); }
+        .section-card {
+            background: #fff;
+            border-radius: 16px;
+            padding: 32px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        }
+        .btn-primary {
+            background-color: #4f46e5;
+            border: none;
+            font-weight: 600;
+            border-radius: 12px;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            border-color: #dee2e6;
+        }
+        .table thead th {
+            background-color: #e0e7ff;
+            color: #1e1b4b;
+        }
+    </style>
 </head>
-<body class="bg-light">
-
-<div class="container py-4">
-
+<body>
+<div class="container py-5">
     <jsp:include page="navbar.jsp" />
 
-    <!-- 시간표 영역 -->
-    <div class="card p-4 mb-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h5 class="fw-bold" id="titleTimetable">내 시간표</h5>
+    <div class="section-card mb-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold" id="titleTimetable">🗓️ 내 시간표</h3>
             <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#timetableModal" id="btnAdd">+ 추가</button>
         </div>
-        <table class="table text-center align-middle">
-            <thead class="table-primary">
+
+        <table class="table table-bordered text-center align-middle">
+            <thead>
                 <tr>
                     <th id="colPeriod">교시</th>
                     <th id="colMon">월요일</th>
@@ -108,7 +129,6 @@
                         <option value="FRI" id="optionFri">금요일</option>
                     </select>
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label" id="labelPeriod">교시</label>
                     <select class="form-select" name="period" required>
@@ -120,7 +140,6 @@
                         <option value="5" id="option5th">5교시</option>
                     </select>
                 </div>
-
                 <div class="mb-3">
                     <label class="form-label" id="labelSubject">과목명</label>
                     <select class="form-select" name="subject" required>
@@ -134,7 +153,6 @@
                         <option id="subject7">자바프로그래밍</option>
                     </select>
                 </div>
-
                 <button class="btn btn-primary w-100" id="btnSubmit">등록</button>
             </div>
         </form>

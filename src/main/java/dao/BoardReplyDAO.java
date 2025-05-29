@@ -5,6 +5,7 @@ import dto.BoardReplyDTO;
 import util.DBUtil;
 import java.sql.*;
 import java.util.*;
+import util.DBUtil;
 
 public class BoardReplyDAO {
     public void insertReply(BoardReplyDTO reply) {
@@ -92,6 +93,38 @@ public class BoardReplyDAO {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+    
+    public boolean deleteRepliesByPostId(int postId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DBUtil.getConnection();
+            String sql = "DELETE FROM board_reply WHERE post_id = ?";
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, postId);
+            int affected = pstmt.executeUpdate();
+            return affected > 0; // ✅ 댓글이 있으면 true, 없으면 false
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            DBUtil.close(pstmt, conn);
+        }
+        return false;
+    }
+    
+    public boolean updateReply(BoardReplyDTO reply) {
+        String sql = "UPDATE board_reply SET content = ? WHERE reply_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, reply.getContent());
+            pstmt.setInt(2, reply.getReplyId());
+            int result = pstmt.executeUpdate();
+            return result > 0;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

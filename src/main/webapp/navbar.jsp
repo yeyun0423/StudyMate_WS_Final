@@ -1,7 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-    // 쿠키에서 user_name, lang 읽기
     String userName = null;
     String lang = "ko";
     Cookie[] cookies = request.getCookies();
@@ -12,7 +11,6 @@
         }
     }
 
-    // 세션에서 userId, isAdmin 확인
     String userId = (String) session.getAttribute("userId");
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
     if (isAdmin == null) isAdmin = false;
@@ -26,8 +24,28 @@
     height: 80px;
     width: auto;
   }
+  .navbar {
+    background-color: #ffffff !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+    border-radius: 16px;
+    padding: 12px 24px;
+  }
+  .navbar-nav .nav-link {
+    font-weight: 600;
+    color: #1e1b4b !important;
+  }
+  .dropdown-menu a {
+    font-weight: 500;
+  }
+  #logoutBtn {
+    background-color: #4f46e5;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 6px 16px;
+    font-weight: 600;
+  }
 </style>
-
 
 <!-- 로고 & 제목 -->
 <div class="d-flex align-items-center mb-3">
@@ -36,7 +54,7 @@
 </div>
 
 <!-- 네비게이션 -->
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm rounded px-3 mb-4">
+<nav class="navbar navbar-expand-lg navbar-light mb-4">
     <div class="container-fluid">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
             <li class="nav-item">
@@ -83,7 +101,6 @@
 
         <!-- 우측: 언어 스위치 + 환영 문구 + 로그아웃 -->
         <div class="d-flex align-items-center gap-3">
-            <!-- KR/EN 언어 스위치 -->
             <div class="lang-toggle d-flex align-items-center gap-1">
                 <span class="me-1">KR</span>
                 <form action="changeLang" method="post" class="m-0 p-0">
@@ -98,12 +115,10 @@
                 <span class="ms-0">EN</span>
             </div>
 
-            <!-- 환영 메시지 + 로그아웃 -->
             <span id="welcomeText" class="fw-bold">
                 <%= userName != null ? userName + "님, " : "" %><fmt:message key="menuWelcome" />
             </span>
-           <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='logout'">로그아웃</button>
-           
+            <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='logout'">로그아웃</button>
         </div>
     </div>
 </nav>
@@ -112,7 +127,4 @@
     const userId = "<%= userId != null ? userId : "" %>";
     const userName = "<%= userName != null ? userName : "" %>";
 </script>
-
-<!-- lang-toggle.js -->
 <script src="<%= request.getContextPath() %>/resources/js/lang-toggle.js"></script>
-

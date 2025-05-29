@@ -287,43 +287,47 @@ public class BoardPostDAO {
         }
 		return result > 0;
     }
-    
-    public List<BoardPostDTO> getQnaPostsWithStatus() {
+    public List<BoardPostDTO> getQnaPostsWithStatus(int page, int limit) {
         List<BoardPostDTO> list = new ArrayList<>();
-        String sql = """
-            SELECT 
-                p.post_id,
-                p.writer_id,
-                u.name AS writer_name,
-                p.title,
-                p.created_at,
-                CASE 
-                    WHEN COUNT(r.reply_id) > 0 THEN '답변 완료'
-                    ELSE '대기중'
-                END AS status
-            FROM board_post p
-            LEFT JOIN board_reply r ON p.post_id = r.post_id
-            WHERE p.board_type = 'QNA'
-            GROUP BY p.post_id
-            ORDER BY p.created_at DESC
-            """;
-
+        String sql = "SELECT DISTINCT bp.post_id, bp.title, bp.writer_id, u.name AS writer_name, " +
+        			 "bp.created_at, " +
+                     "CASE WHEN br.reply_id IS NOT NULL THEN '답변 완료' ELSE '대기중' END AS status " +
+                     "FROM board_post bp " +
+                     "JOIN user u ON bp.writer_id = u.user_id " +
+                     "LEFT JOIN board_reply br ON bp.post_id = br.post_id " +
+                     "WHERE bp.board_type = 'QNA' " +
+                     "ORDER BY bp.created_at DESC LIMIT ? OFFSET ?";
         try (Connection conn = DBUtil.getConnection();
-             PreparedStatement pstmt = conn.prepareStatement(sql);
-             ResultSet rs = pstmt.executeQuery()) {
-            
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, limit);
+            pstmt.setInt(2, (page - 1) * limit);
+            ResultSet rs = pstmt.executeQuery();
             while (rs.next()) {
-                BoardPostDTO post = new BoardPostDTO();
-                post.setPostId(rs.getInt("post_id"));
-                post.setWriterId(rs.getString("writer_id"));
-                post.setTitle(rs.getString("title"));
-                post.setCreatedAt(rs.getTimestamp("created_at"));
-                post.setStatus(rs.getString("status"));
-                list.add(post);
+                BoardPostDTO dto = new BoardPostDTO();
+                dto.setPostId(rs.getInt("post_id"));
+                dto.setTitle(rs.getString("title"));
+                dto.setWriterName(rs.getString("writer_name"));
+                dto.setStatus(rs.getString("status"));
+                list.add(dto);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
         return list;
     }
+
+
+    public int getQnaPostCount() {
+        String sql = "SELECT COUNT(*) FROM board_post WHERE board_type = 'QNA'";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) return rs.getInt(1);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    
 }

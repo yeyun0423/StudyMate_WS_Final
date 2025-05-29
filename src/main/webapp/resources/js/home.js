@@ -1,7 +1,13 @@
-let memberCount = 1;
-let recommendedFriendCount = 0;  
+let memberCount = 2;
+let recommendedFriendCount = 0;
+let subjectSelected = false;
 
 function increaseMember() {
+    if (!subjectSelected) {
+        showToast("먼저 과목을 선택하세요.");
+        return;
+    }
+
     const maxAllowed = recommendedFriendCount + 1;
     if (memberCount >= maxAllowed) {
         showToast(`추천 친구가 ${recommendedFriendCount}명이므로 최대 ${maxAllowed}명까지 가능합니다.`);
@@ -10,13 +16,27 @@ function increaseMember() {
 
     memberCount++;
     document.getElementById("memberCount").textContent = memberCount;
+
+    // 친구 체크박스 전부 해제
+    document.querySelectorAll(".friendCheckbox:checked").forEach(cb => cb.checked = false);
+
     updateCheckboxLimit();
 }
 
+
 function decreaseMember() {
-    if (memberCount > 1) {
+    if (!subjectSelected) {
+        showToast("먼저 과목을 선택하세요.");
+        return;
+    }
+
+    if (memberCount > 2) {
         memberCount--;
         document.getElementById("memberCount").textContent = memberCount;
+
+        // 체크된 친구 전부 해제
+        document.querySelectorAll(".friendCheckbox:checked").forEach(cb => cb.checked = false);
+
         updateCheckboxLimit();
     }
 }
@@ -31,15 +51,18 @@ function fetchRecommendedFriends() {
 
     if (!subject) {
         warningMessage.textContent = "과목을 선택해주세요.";
+        subjectSelected = false;
         return;
     }
 
     warningMessage.textContent = "";
+    subjectSelected = true;
+    memberCount = 2;
+    document.getElementById("memberCount").textContent = memberCount;
 
     fetch(`getRecommendedFriends?subject=${encodeURIComponent(subject)}`)
         .then(response => response.json())
         .then(data => {
-            // 본인이 이미 참여 중인지 확인
             if (data.selfJoined) {
                 createBtn.disabled = true;
                 joinedMsg.style.display = "inline";
@@ -87,9 +110,48 @@ function fetchRecommendedFriends() {
             bindFriendCheckboxLimit();
         })
         .catch(error => {
-            console.error("친구 추천 오류:", error);
+            console.error("추천 친구 오류:", error);
             container.innerHTML = '<p class="text-danger">추천 친구를 불러오는 중 오류가 발생했습니다.</p>';
         });
+}
+
+function bindFriendCheckboxLimit() {
+    const checkboxes = document.querySelectorAll(".friendCheckbox:not(:disabled)");
+
+    checkboxes.forEach(cb => {
+        cb.addEventListener("change", () => {
+            if (!subjectSelected || memberCount < 2) {
+                cb.checked = false;
+                showToast("먼저 과목과 인원 수를 선택하세요.");
+                return;
+            }
+
+            const checked = document.querySelectorAll(".friendCheckbox:checked");
+            const maxSelectable = memberCount - 1;
+
+            if (checked.length >= maxSelectable) {
+                checkboxes.forEach(c => {
+                    if (!c.checked) c.disabled = true;
+                });
+            } else {
+                checkboxes.forEach(c => c.disabled = false);
+            }
+        });
+    });
+}
+
+function updateCheckboxLimit() {
+    const checkboxes = document.querySelectorAll(".friendCheckbox:not(:disabled)");
+    const checked = document.querySelectorAll(".friendCheckbox:checked");
+    const maxSelectable = memberCount - 1;
+
+    if (checked.length >= maxSelectable) {
+        checkboxes.forEach(c => {
+            if (!c.checked) c.disabled = true;
+        });
+    } else {
+        checkboxes.forEach(c => c.disabled = false);
+    }
 }
 
 function createStudyGroup() {
@@ -131,43 +193,6 @@ function createStudyGroup() {
         console.error("스터디 생성 실패:", err);
         alert("스터디 생성 중 오류가 발생했습니다.");
     });
-}
-
-function bindFriendCheckboxLimit() {
-    const checkboxes = document.querySelectorAll(".friendCheckbox:not(:disabled)");
-
-    checkboxes.forEach(cb => {
-        cb.addEventListener("change", () => {
-            const checked = document.querySelectorAll(".friendCheckbox:checked");
-            const maxSelectable = memberCount - 1;
-
-            if (checked.length >= maxSelectable) {
-                checkboxes.forEach(c => {
-                    if (!c.checked) c.disabled = true;
-                });
-
-                if (checked.length > maxSelectable) {
-                    showToast(`최대 ${maxSelectable}명까지만 선택할 수 있습니다.`);
-                }
-            } else {
-                checkboxes.forEach(c => c.disabled = false);
-            }
-        });
-    });
-}
-
-function updateCheckboxLimit() {
-    const checkboxes = document.querySelectorAll(".friendCheckbox:not(:disabled)");
-    const checked = document.querySelectorAll(".friendCheckbox:checked");
-    const maxSelectable = memberCount - 1;
-
-    if (checked.length >= maxSelectable) {
-        checkboxes.forEach(c => {
-            if (!c.checked) c.disabled = true;
-        });
-    } else {
-        checkboxes.forEach(c => c.disabled = false);
-    }
 }
 
 function showToast(message) {
