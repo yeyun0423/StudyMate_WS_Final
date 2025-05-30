@@ -6,10 +6,9 @@
     int limit = 5;
     UserDAO dao = new UserDAO();
     List<UserDTO> users = (search == null || search.trim().isEmpty()) ? dao.getUsersByPage(currentpage, limit) : dao.searchUsersByPage(search, currentpage, limit);
-    int totalUsers = dao.getUserCount(); // 항상 전체 유저 수
+    int totalUsers = dao.getUserCount();
     int filteredUsers = (search == null || search.trim().isEmpty()) ? totalUsers : dao.getSearchUserCount(search);
     int totalPages = (int) Math.ceil((double) filteredUsers / limit);
-
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -55,21 +54,21 @@
         <h3 class="fw-bold mb-3">👥 전체 유저 목록</h3>
         <p class="text-muted">총 가입 유저 수: <strong><%= totalUsers %></strong>명</p>
 
-<!-- 검색창 + 전체 목록 버튼 -->
-<div class="d-flex justify-content-between align-items-center mb-3">
-    <% if (search != null && !search.trim().isEmpty()) { %>
-        <a href="user_list.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
-    <% } else { %>
-        <div></div>
-    <% } %>
-    <form action="user_list.jsp" method="get" class="d-flex">
-        <input type="text" name="search" class="form-control me-2" style="width: 250px;"
-               placeholder="아이디/이름 검색" value="<%= search != null ? search : "" %>">
-        <button class="btn btn-outline-primary btn-sm">검색</button>
-    </form>
-</div>
+        <!-- 검색창 + 전체 목록 버튼 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <% if (search != null && !search.trim().isEmpty()) { %>
+                <a href="user_list.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
+            <% } else { %>
+                <div></div>
+            <% } %>
+            <form action="user_list.jsp" method="get" class="d-flex">
+                <input type="text" name="search" class="form-control me-2" style="width: 250px;"
+                       placeholder="아이디/이름 검색" value="<%= search != null ? search : "" %>">
+                <button class="btn btn-outline-primary btn-sm">검색</button>
+            </form>
+        </div>
 
-
+        <!-- 유저 테이블 -->
         <table class="table table-bordered text-center align-middle">
             <thead class="table-light">
                 <tr>
@@ -83,8 +82,12 @@
                 </tr>
             </thead>
             <tbody>
-                <% int index = (currentpage - 1) * limit + 1;
-                   for (UserDTO u : users) { %>
+                <%
+                    int index = (currentpage - 1) * limit + 1;
+                    for (UserDTO u : users) {
+                        String profileImg = (u.getProfileImage() != null && !u.getProfileImage().isEmpty())
+                                            ? u.getProfileImage() : "default.png";
+                %>
                 <tr>
                     <td><%= index++ %></td>
                     <td><img src="resources/images/<%= u.getProfileImage() != null ? u.getProfileImage() : "default.png" %>" class="profile-img"></td>

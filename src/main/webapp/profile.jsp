@@ -21,9 +21,17 @@
         return;
     }
 
-    if (profileImage == null || profileImage.isEmpty()) {
+    // DB에서 다시 확인하고 세션 갱신
+    if (profileImage == null || profileImage.trim().isEmpty()) {
         profileImage = new UserDAO().getProfileImageById(userId);
+        if (profileImage == null || profileImage.trim().isEmpty()) {
+            profileImage = "default.png";
+        }
         session.setAttribute("profileImage", profileImage);
+    }
+
+    if (profileImage == null || profileImage.trim().isEmpty()) {
+        profileImage = "default.png";
     }
 
     UserDTO user = new UserDAO().getUserById(userId);
@@ -58,10 +66,7 @@
         .btn-primary:hover {
             background-color: #4338ca;
         }
-        .btn-outline-danger {
-            border-radius: 12px;
-        }
-        .btn-outline-primary {
+        .btn-outline-danger, .btn-outline-primary {
             border-radius: 12px;
         }
     </style>
@@ -72,7 +77,7 @@
 
     <div class="section-card">
         <div class="row">
-            <div class="col-md-4 text-center">
+            <div class="col-md-4 text-center" style="margin-top: 40px;">
                 <div class="mb-4">
                     <img src="<%= request.getContextPath() %>/resources/images/<%= profileImage %>"
                          alt="프로필 이미지" class="img-thumbnail rounded-circle"
@@ -81,7 +86,7 @@
 
                 <form action="<%= request.getContextPath() %>/profileUpload" method="post" enctype="multipart/form-data" class="mb-3">
                     <div class="input-group">
-                        <input type="file" class="form-control" id="profileImageInput" name="profileImage" required>
+                        <input type="file" class="form-control" name="profileImage" required>
                         <input type="hidden" name="userId" value="<%= userId %>">
                         <button type="submit" class="btn btn-outline-primary">
                             <i class="bi bi-upload"></i> 업로드
@@ -89,7 +94,8 @@
                     </div>
                 </form>
 
-                <form action="<%= request.getContextPath() %>/deleteImage" method="post" onsubmit="return confirm('정말 프로필 이미지를 삭제하시겠습니까?');">
+                <form action="<%= request.getContextPath() %>/deleteImage" method="post"
+                      onsubmit="return confirm('정말 프로필 이미지를 삭제하시겠습니까?');">
                     <input type="hidden" name="userId" value="<%= userId %>">
                     <button type="submit" class="btn btn-outline-danger btn-sm mt-2">현재 프로필 사진 삭제하기</button>
                 </form>
@@ -120,7 +126,8 @@
                     <input type="hidden" name="userId" value="<%= userId %>">
                     <div class="d-flex gap-2 mt-4 justify-content-end align-items-center">
                         <button type="submit" class="btn btn-primary btn-sm px-4">저장</button>
-                        <form action="<%= request.getContextPath() %>/deleteAccount" method="post" onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="m-0">
+                        <form action="<%= request.getContextPath() %>/deleteAccount" method="post"
+                              onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="m-0">
                             <input type="hidden" name="userId" value="<%= userId %>">
                             <button type="submit" class="btn btn-outline-danger btn-sm px-3">회원 탈퇴</button>
                         </form>

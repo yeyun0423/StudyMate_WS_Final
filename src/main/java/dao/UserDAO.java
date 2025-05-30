@@ -221,6 +221,7 @@ public class UserDAO {
                     u.setName(rs.getString("name"));
                     u.setPassword(rs.getString("password"));
                     u.setJoinDate(rs.getTimestamp("join_date"));
+                    u.setProfileImage(rs.getString("profile_image"));
                     list.add(u);
                 }
             }
@@ -249,6 +250,7 @@ public class UserDAO {
                 u.setName(rs.getString("name"));
                 u.setPassword(rs.getString("password"));
                 u.setJoinDate(rs.getTimestamp("join_date"));
+                u.setProfileImage(rs.getString("profile_image"));
                 list.add(u);
             }
         } catch (Exception e) {

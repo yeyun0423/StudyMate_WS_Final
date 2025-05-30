@@ -34,7 +34,7 @@
         }
 
         .logo-wrapper {
-            height: 100px;
+            height: 150px;
             margin-bottom: 20px;
             display: flex;
             justify-content: center;

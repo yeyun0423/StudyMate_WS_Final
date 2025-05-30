@@ -16,13 +16,9 @@ function increaseMember() {
 
     memberCount++;
     document.getElementById("memberCount").textContent = memberCount;
-
-    // 친구 체크박스 전부 해제
     document.querySelectorAll(".friendCheckbox:checked").forEach(cb => cb.checked = false);
-
     updateCheckboxLimit();
 }
-
 
 function decreaseMember() {
     if (!subjectSelected) {
@@ -33,10 +29,7 @@ function decreaseMember() {
     if (memberCount > 2) {
         memberCount--;
         document.getElementById("memberCount").textContent = memberCount;
-
-        // 체크된 친구 전부 해제
         document.querySelectorAll(".friendCheckbox:checked").forEach(cb => cb.checked = false);
-
         updateCheckboxLimit();
     }
 }
@@ -79,34 +72,61 @@ function fetchRecommendedFriends() {
                 return;
             }
 
-            const list = document.createElement("div");
-            list.className = "list-group";
-
             data.friends.forEach(friend => {
-                const item = document.createElement("label");
-                item.className = "list-group-item d-flex justify-content-between align-items-center";
+                const card = document.createElement("div");
+                card.className = "card text-center friend-card p-3 d-flex flex-column justify-content-between align-items-center";
+                card.style.width = "10rem";
+                card.style.height = "220px";
 
-                const nameSpan = document.createElement("span");
-                nameSpan.textContent = `${friend.name} (${friend.userId})`;
-
+                // 체크박스 (맨 위)
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
-                checkbox.className = "form-check-input friendCheckbox";
+                checkbox.className = "form-check-input friendCheckbox mb-2";
                 checkbox.value = friend.userId;
+                if (friend.joined) checkbox.disabled = true;
 
+                // 프로필 이미지
+                const img = document.createElement("img");
+                img.src = `${CONTEXT_PATH}/resources/images/${friend.profileImage}`;
+                img.alt = "profile";
+                img.className = "rounded-circle";
+                img.style.width = "60px";
+                img.style.height = "60px";
+                img.style.objectFit = "cover";
+
+                // 이름
+                const name = document.createElement("div");
+                name.className = "fw-bold mt-2";
+                name.textContent = friend.name;
+
+                // 아이디
+                const userId = document.createElement("div");
+                userId.className = "text-muted small";
+                userId.textContent = `(${friend.userId})`;
+
+                // 참여중 배지 (맨 아래)
+                const badge = document.createElement("div");
+                badge.className = "mt-auto pt-2";
                 if (friend.joined) {
-                    checkbox.disabled = true;
-                    nameSpan.innerHTML += " <span class='badge bg-secondary ms-2'>참여중</span>";
+                    badge.classList.add("badge", "bg-secondary");
+                    badge.textContent = "참여중";
                 } else {
-                    recommendedFriendCount++;
+                    badge.innerHTML = "&nbsp;"; // 공간 고정
                 }
 
-                item.appendChild(nameSpan);
-                item.appendChild(checkbox);
-                list.appendChild(item);
+                // 카드 구성
+                card.appendChild(checkbox);
+                card.appendChild(img);
+                card.appendChild(name);
+                card.appendChild(userId);
+                card.appendChild(badge);
+                container.appendChild(card);
+
+                if (!friend.joined) {
+                    recommendedFriendCount++;
+                }
             });
 
-            container.appendChild(list);
             bindFriendCheckboxLimit();
         })
         .catch(error => {

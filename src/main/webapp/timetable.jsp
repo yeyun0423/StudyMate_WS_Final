@@ -3,7 +3,6 @@
 <%
     String userId = (String) session.getAttribute("userId");
     String userName = null;
-    Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
@@ -36,6 +35,8 @@
             data[row][col] = t.getSubject();
         }
     }
+
+    String today = new java.text.SimpleDateFormat("yyyy-MM-dd").format(new java.util.Date());
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -62,6 +63,9 @@
         .btn-primary:hover {
             background-color: #4338ca;
         }
+        .btn-outline-secondary {
+            border-radius: 12px;
+        }
         .table th, .table td {
             vertical-align: middle;
             border-color: #dee2e6;
@@ -71,6 +75,11 @@
             color: #1e1b4b;
         }
     </style>
+    <script>
+        function exportTimetable() {
+            window.print();
+        }
+    </script>
 </head>
 <body>
 <div class="container py-5">
@@ -78,19 +87,22 @@
 
     <div class="section-card mb-5">
         <div class="d-flex justify-content-between align-items-center mb-4">
-            <h3 class="fw-bold" id="titleTimetable">🗓️ 내 시간표</h3>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#timetableModal" id="btnAdd">+ 추가</button>
+            <h3 class="fw-bold">🗓️ 내 시간표</h3>
+            <div>
+                <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#timetableModal">+ 추가</button>
+                <button class="btn btn-outline-secondary" onclick="exportTimetable()">🖨️ 내보내기</button>
+            </div>
         </div>
 
         <table class="table table-bordered text-center align-middle">
             <thead>
                 <tr>
-                    <th id="colPeriod">교시</th>
-                    <th id="colMon">월요일</th>
-                    <th id="colTue">화요일</th>
-                    <th id="colWed">수요일</th>
-                    <th id="colThu">목요일</th>
-                    <th id="colFri">금요일</th>
+                    <th style="background-color: #e0e7ff;">교시</th>
+                    <th style="background-color: #e0e7ff;">월요일</th>
+                    <th style="background-color: #e0e7ff;">화요일</th>
+                    <th style="background-color: #e0e7ff;">수요일</th>
+                    <th style="background-color: #e0e7ff;">목요일</th>
+                    <th style="background-color: #e0e7ff;">금요일</th>
                 </tr>
             </thead>
             <tbody>
@@ -98,7 +110,7 @@
                 for (int i = 0; i < 5; i++) {
             %>
             <tr>
-                <th><%= (i + 1) %>교시</th>
+                <th style="background-color: #e0e7ff;"><%= (i + 1) %>교시</th>
                 <% for (int j = 0; j < 5; j++) { %>
                     <td><%= data[i][j] == null ? "" : data[i][j] %></td>
                 <% } %>
@@ -106,6 +118,10 @@
             <% } %>
             </tbody>
         </table>
+
+        <div class="text-end text-muted mt-2">
+            <small>📅 <%= today %> 기준</small>
+        </div>
     </div>
 </div>
 
@@ -114,54 +130,49 @@
     <div class="modal-dialog">
         <form class="modal-content p-4" action="timetable" method="post">
             <div class="modal-header border-0">
-                <h5 class="modal-title fw-bold" id="modalTitle">시간표 추가</h5>
+                <h5 class="modal-title fw-bold text-primary">⏰ 시간표 추가</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body">
                 <div class="mb-3">
-                    <label class="form-label" id="labelDay">요일</label>
+                    <label class="form-label">요일</label>
                     <select class="form-select" name="day" required>
                         <option selected disabled value="">선택하세요</option>
-                        <option value="MON" id="optionMon">월요일</option>
-                        <option value="TUE" id="optionTue">화요일</option>
-                        <option value="WED" id="optionWed">수요일</option>
-                        <option value="THU" id="optionThu">목요일</option>
-                        <option value="FRI" id="optionFri">금요일</option>
+                        <option value="MON">월요일</option>
+                        <option value="TUE">화요일</option>
+                        <option value="WED">수요일</option>
+                        <option value="THU">목요일</option>
+                        <option value="FRI">금요일</option>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" id="labelPeriod">교시</label>
+                    <label class="form-label">교시</label>
                     <select class="form-select" name="period" required>
                         <option selected disabled value="">선택하세요</option>
-                        <option value="1" id="option1st">1교시</option>
-                        <option value="2" id="option2nd">2교시</option>
-                        <option value="3" id="option3rd">3교시</option>
-                        <option value="4" id="option4th">4교시</option>
-                        <option value="5" id="option5th">5교시</option>
+                        <% for (int i = 1; i <= 5; i++) { %>
+                            <option value="<%= i %>"><%= i %>교시</option>
+                        <% } %>
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" id="labelSubject">과목명</label>
+                    <label class="form-label">과목명</label>
                     <select class="form-select" name="subject" required>
                         <option selected disabled value="">선택하세요</option>
-                        <option id="subject1">데이터베이스</option>
-                        <option id="subject2">웹서버컴퓨팅</option>
-                        <option id="subject3">네트워크프로그래밍</option>
-                        <option id="subject4">자료구조및실습</option>
-                        <option id="subject5">시스템프로그래밍</option>
-                        <option id="subject6">스프링프레임워크</option>
-                        <option id="subject7">자바프로그래밍</option>
+                        <option>데이터베이스</option>
+                        <option>웹서버컴퓨팅</option>
+                        <option>네트워크프로그래밍</option>
+                        <option>자료구조및실습</option>
+                        <option>시스템프로그래밍</option>
+                        <option>스프링프레임워크</option>
+                        <option>자바프로그래밍</option>
                     </select>
                 </div>
-                <button class="btn btn-primary w-100" id="btnSubmit">등록</button>
+                <button class="btn btn-primary w-100">등록</button>
             </div>
         </form>
     </div>
 </div>
-<script>
-	const USER_NAME = "<%= userName %>";
-	const USER_ID = "<%= userId %>";
-</script>
-<script src="<%= request.getContextPath() %>/resources/js/bootstrap.bundle.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

@@ -21,7 +21,7 @@
 
 <style>
   .logo-img {
-    height: 80px;
+    height: 120px;
     width: auto;
   }
   .navbar {
@@ -68,7 +68,7 @@
                     <fmt:message key="menuMyPage" />
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a id="menuStudy" class="dropdown-item" href="#"><fmt:message key="menuStudy" /></a></li>
+                    <li><a id="menuStudy" class="dropdown-item" href="mystudygroup.jsp"><fmt:message key="menuStudy" /></a></li>
                     <li><a id="menuProfile" class="dropdown-item" href="profile.jsp"><fmt:message key="menuProfile" /></a></li>
                     <li><a id="menuTimetable" class="dropdown-item" href="timetable.jsp"><fmt:message key="menuTimetable" /></a></li>
                 </ul>
@@ -92,7 +92,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a id="menuUserList" class="dropdown-item" href="user_list.jsp"><fmt:message key="menuUserList" /></a></li>
-                        <li><a id="menuMatchList" class="dropdown-item" href="#"><fmt:message key="menuMatchList" /></a></li>
+                        <li><a id="menuMatchList" class="dropdown-item" href="matchlist.jsp"><fmt:message key="menuMatchList" /></a></li>
                         <li><a id="menuQnaAnswer" class="dropdown-item" href="qna_answer_list.jsp"><fmt:message key="menuQnaAnswer" /></a></li>
                     </ul>
                 </li>
