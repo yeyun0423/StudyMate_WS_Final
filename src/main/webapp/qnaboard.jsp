@@ -64,6 +64,23 @@
             text-align: right;
             min-width: 100px;
         }
+        .btn-primary {
+            background-color: #4f46e5;
+            border: none;
+            border-radius: 12px;
+        }
+        .btn-primary:hover {
+            background-color: #4338ca;
+        }
+        .pagination .page-link {
+            border-radius: 10px;
+            color: #4f46e5;
+        }
+        .pagination .active .page-link {
+            background-color: #4f46e5;
+            color: white;
+            border: none;
+        }
     </style>
 </head>
 <body>
@@ -99,24 +116,24 @@
         </div>
         <% } %>
 
-        <nav class="mt-4">
-            <ul class="pagination justify-content-center">
-                <li class="page-item <%= currentPage == 1 ? "disabled" : "" %>">
-                    <a class="page-link" href="qnaboard.jsp?page=<%= currentPage - 1 %>">이전</a>
-                </li>
+        <nav class="mt-4 d-flex justify-content-center">
+            <ul class="pagination">
+                <% if (currentPage > 1) { %>
+                    <li class="page-item"><a class="page-link" href="qnaboard.jsp?page=<%= currentPage - 1 %>">이전</a></li>
+                <% } %>
                 <% for (int i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= currentPage == i ? "active" : "" %>">
                         <a class="page-link" href="qnaboard.jsp?page=<%= i %>"><%= i %></a>
                     </li>
                 <% } %>
-                <li class="page-item <%= currentPage == totalPages ? "disabled" : "" %>">
-                    <a class="page-link" href="qnaboard.jsp?page=<%= currentPage + 1 %>">다음</a>
-                </li>
+                <% if (currentPage < totalPages) { %>
+                    <li class="page-item"><a class="page-link" href="qnaboard.jsp?page=<%= currentPage + 1 %>">다음</a></li>
+                <% } %>
             </ul>
         </nav>
 
-        <form action="qnawrite.jsp" method="get" class="text-end mt-3">
-            <button type="submit" class="btn btn-primary rounded-pill">글쓰기</button>
+        <form action="qnawrite.jsp" method="get" class="text-end mt-4">
+            <button type="submit" class="btn btn-primary">글쓰기</button>
         </form>
     </div>
 </div>

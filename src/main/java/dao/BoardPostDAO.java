@@ -49,13 +49,19 @@ public class BoardPostDAO {
     private List<BoardPostDTO> getPostsByPageAndType(String boardType, int page, int postsPerPage) {
         List<BoardPostDTO> posts = new ArrayList<>();
         String sql = """
-            SELECT b.*, u.name AS writer_name
-            FROM board_post b
-            JOIN user u ON b.writer_id = u.user_id
-            WHERE b.board_type = ?
-            ORDER BY b.created_at DESC
-            LIMIT ?, ?
-        """;
+        	    SELECT b.post_id, b.board_type, b.writer_id, b.title, b.content,
+        	           b.created_at, b.filename, b.views,
+        	           u.name AS writer_name,
+        	           (SELECT COUNT(*) FROM board_comment c WHERE c.post_id = b.post_id) AS comment_count
+        	    FROM board_post b
+        	    JOIN user u ON b.writer_id = u.user_id
+        	    WHERE b.board_type = ?
+        	    ORDER BY b.created_at DESC
+        	    LIMIT ?, ?
+        	""";
+
+
+
         int offset = (page - 1) * postsPerPage;
 
         try (Connection conn = DBUtil.getConnection();
@@ -74,6 +80,8 @@ public class BoardPostDAO {
                     post.setContent(rs.getString("content"));
                     post.setCreatedAt(rs.getTimestamp("created_at"));
                     post.setFilename(rs.getString("filename"));
+                    post.setViews(rs.getInt("views"));
+                    post.setCommentCount(rs.getInt("comment_count"));
                     posts.add(post);
                 }
             }
@@ -107,6 +115,7 @@ public class BoardPostDAO {
                     post.setContent(rs.getString("content"));
                     post.setCreatedAt(rs.getTimestamp("created_at"));
                     post.setFilename(rs.getString("filename"));
+                    post.setViews(rs.getInt("views"));
                     return post;
                 }
             }
@@ -328,6 +337,163 @@ public class BoardPostDAO {
         }
         return 0;
     }
+    
+    public List<BoardPostDTO> searchQnaPostsWithStatus(String search, int page, int limit) {
+        List<BoardPostDTO> list = new ArrayList<>();
+        String sql = """
+            SELECT DISTINCT p.post_id, p.title, p.writer_id, u.name AS writer_name,
+                   p.created_at, p.is_private, p.board_type,
+                   CASE WHEN r.reply_id IS NOT NULL THEN '답변 완료' ELSE '대기중' END AS status
+            FROM board_post p
+            JOIN user u ON p.writer_id = u.user_id
+            LEFT JOIN board_reply r ON p.post_id = r.post_id
+            WHERE p.board_type = 'QNA' AND (p.title LIKE ? OR u.name LIKE ?)
+            ORDER BY p.created_at DESC LIMIT ?, ?
+        """;
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            String like = "%" + search + "%";
+            pstmt.setString(1, like);
+            pstmt.setString(2, like);
+            pstmt.setInt(3, (page - 1) * limit);
+            pstmt.setInt(4, limit);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                BoardPostDTO post = new BoardPostDTO();
+                post.setPostId(rs.getInt("post_id"));
+                post.setWriterId(rs.getString("writer_id"));
+                post.setWriterName(rs.getString("writer_name"));
+                post.setTitle(rs.getString("title"));
+                post.setCreatedAt(rs.getTimestamp("created_at"));
+                post.setPrivate(rs.getBoolean("is_private"));
+                post.setBoardType(rs.getString("board_type"));
+                post.setStatus(rs.getString("status")); // ✅ 상태 설정
+                list.add(post);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
 
     
+    public int getSearchQnaPostCount(String search) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM board_post p " +
+                     "JOIN user u ON p.writer_id = u.user_id " +
+                     "WHERE p.board_type = 'QNA' AND (p.title LIKE ? OR u.name LIKE ?)";
+
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            String like = "%" + search + "%";
+            pstmt.setString(1, like);
+            pstmt.setString(2, like);
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+
+
+    private BoardPostDTO mapResultSetToPost(ResultSet rs) throws SQLException {
+        BoardPostDTO post = new BoardPostDTO();
+        post.setPostId(rs.getInt("post_id"));
+        post.setWriterId(rs.getString("writer_id"));
+        post.setWriterName(rs.getString("writer_name"));
+        post.setTitle(rs.getString("title"));
+        post.setContent(rs.getString("content"));
+        post.setCreatedAt(rs.getTimestamp("created_at"));
+        post.setPrivate(rs.getBoolean("is_private"));
+        post.setBoardType(rs.getString("board_type"));
+        post.setStatus(rs.getString("status"));  // 'status' 컬럼이 있는 경우
+        return post;
+    }
+    
+    public List<BoardPostDTO> searchFreePostsByPage(String search, int page, int postsPerPage) {
+        List<BoardPostDTO> posts = new ArrayList<>();
+        String sql = """
+            SELECT b.*, u.name AS writer_name,
+                   (SELECT COUNT(*) FROM board_comment c WHERE c.post_id = b.post_id) AS comment_count
+            FROM board_post b
+            JOIN user u ON b.writer_id = u.user_id
+            WHERE b.board_type = 'FREE' AND (b.title LIKE ? OR u.name LIKE ?)
+            ORDER BY b.created_at DESC
+            LIMIT ? OFFSET ?
+        """;
+
+        int offset = (page - 1) * postsPerPage;
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            String like = "%" + search + "%";
+            pstmt.setString(1, like);
+            pstmt.setString(2, like);
+            pstmt.setInt(3, postsPerPage);
+            pstmt.setInt(4, offset);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                BoardPostDTO post = new BoardPostDTO();
+                post.setPostId(rs.getInt("post_id"));
+                post.setBoardType(rs.getString("board_type"));
+                post.setWriterId(rs.getString("writer_id"));
+                post.setWriterName(rs.getString("writer_name"));
+                post.setTitle(rs.getString("title"));
+                post.setContent(rs.getString("content"));
+                post.setCreatedAt(rs.getTimestamp("created_at"));
+                post.setFilename(rs.getString("filename"));
+                post.setViews(rs.getInt("views"));
+                post.setCommentCount(rs.getInt("comment_count"));
+                posts.add(post);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return posts;
+    }
+    
+    public int getSearchFreePostCount(String search) {
+        String sql = """
+            SELECT COUNT(*)
+            FROM board_post b
+            JOIN user u ON b.writer_id = u.user_id
+            WHERE b.board_type = 'FREE' AND (b.title LIKE ? OR u.name LIKE ?)
+        """;
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            String like = "%" + search + "%";
+            pstmt.setString(1, like);
+            pstmt.setString(2, like);
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+    public void increaseViews(int postId) {
+        String sql = "UPDATE board_post SET views = views + 1 WHERE post_id = ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, postId);
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
 }

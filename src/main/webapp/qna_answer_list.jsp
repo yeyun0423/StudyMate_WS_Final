@@ -24,12 +24,25 @@
         return;
     }
 
+    String search = request.getParameter("search");
     int currentpage = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
     int limit = 5;
     BoardPostDAO dao = new BoardPostDAO();
-    List<BoardPostDTO> qnaPosts = dao.getQnaPostsWithStatus(currentpage, limit);
+
+    List<BoardPostDTO> qnaPosts = (search == null || search.trim().isEmpty()) ?
+        dao.getQnaPostsWithStatus(currentpage, limit) :
+        dao.searchQnaPostsWithStatus(search, currentpage, limit);
+
     int totalPosts = dao.getQnaPostCount();
-    int totalPages = (int)Math.ceil((double)totalPosts / limit);
+    int filteredPosts = (search == null || search.trim().isEmpty()) ? totalPosts : dao.getSearchQnaPostCount(search);
+    int totalPages = (int)Math.ceil((double)filteredPosts / limit);
+
+    int doneCount = 0;
+    int pendingCount = 0;
+    for (BoardPostDTO p : qnaPosts) {
+        if ("답변 완료".equals(p.getStatus())) doneCount++;
+        else pendingCount++;
+    }
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -38,6 +51,7 @@
     <title>Q&A 답변 목록</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
     <style>
         * { font-family: 'SUIT', sans-serif; }
         body { background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff); }
@@ -47,10 +61,19 @@
             padding: 32px;
             box-shadow: 0 8px 24px rgba(0,0,0,0.06);
         }
-        .btn-warning { border-radius: 8px; }
-        .btn-danger { border-radius: 8px; }
-        .status-done { color: #2563eb; font-weight: bold; }  /* 파랑 */
-        .status-pending { color: #6b7280; font-weight: bold; }  /* 회색 */
+        .btn-warning, .btn-danger { border-radius: 8px; }
+        .status-done {
+            background-color: #e0f2fe;
+            color: #0c4a6e;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+        .status-pending {
+            background-color: #fef9c3;
+            color: #78350f;
+            font-weight: bold;
+            border-radius: 8px;
+        }
         .pagination .page-link {
             border-radius: 10px;
             color: #4f46e5;
@@ -74,6 +97,25 @@
     <div class="table-card">
         <h3 class="fw-bold mb-4">💬 Q&A 답변 목록</h3>
 
+        <!-- 검색 + 전체 보기 -->
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <form action="qna_answer_list.jsp" method="get" class="d-flex">
+                <input type="text" name="search" class="form-control form-control-sm me-2" style="width: 250px;" placeholder="작성자 또는 제목 검색" value="<%= search != null ? search : "" %>">
+                <button class="btn btn-outline-primary btn-sm">검색</button>
+            </form>
+            <% if (search != null && !search.trim().isEmpty()) { %>
+                <a href="qna_answer_list.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
+            <% } %>
+        </div>
+
+        <!-- 통계 -->
+        <div class="d-flex gap-3 mb-3">
+            <span class="badge bg-primary-subtle text-primary">총 게시글: <%= filteredPosts %>개</span>
+            <span class="badge bg-success-subtle text-success">답변 완료: <%= doneCount %>개</span>
+            <span class="badge bg-warning-subtle text-warning">대기 중: <%= pendingCount %>개</span>
+        </div>
+
+        <!-- 테이블 -->
         <table class="table table-bordered text-center align-middle">
             <thead class="table-light">
             <tr>
@@ -93,17 +135,14 @@
                 <tr>
                     <td><%= index++ %></td>
                     <td><%= post.getWriterName() %></td>
-                    <td><%= post.getTitle() %></td>
+                    <td><i class="bi bi-chat-dots-fill text-primary me-1"></i><%= post.getTitle() %></td>
                     <td class="<%= answered ? "status-done" : "status-pending" %>">
                         <%= status %>
                     </td>
                     <td>
-                        <a href="qna_edit.jsp?id=<%= post.getPostId() %>" class="btn btn-warning btn-sm">수정</a>
-                        <a href="qna_delete.jsp?id=<%= post.getPostId() %>"
-                           class="btn btn-danger btn-sm"
-                           <%= answered ? "onclick=\"return confirmDelete();\"" : "" %>>
-                            삭제
-                        </a>
+                        <a href="qna_edit.jsp?id=<%= post.getPostId() %>" class="btn btn-warning btn-sm" title="답변 수정">수정</a>
+                        <a href="qna_delete.jsp?id=<%= post.getPostId() %>" class="btn btn-danger btn-sm" title="답변 삭제"
+                           <%= answered ? "onclick=\"return confirmDelete();\"" : "" %>>삭제</a>
                     </td>
                 </tr>
             <% } %>
@@ -114,15 +153,15 @@
         <nav class="mt-4 d-flex justify-content-center">
             <ul class="pagination">
                 <% if (currentpage > 1) { %>
-                    <li class="page-item"><a class="page-link" href="qna_answer_list.jsp?page=<%= currentpage - 1 %>">이전</a></li>
+                    <li class="page-item"><a class="page-link" href="user_list.jsp?page=<%= currentpage - 1 %>&search=<%= search != null ? search : "" %>">이전</a></li>
                 <% } %>
                 <% for (int i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= i == currentpage ? "active" : "" %>">
-                        <a class="page-link" href="qna_answer_list.jsp?page=<%= i %>"><%= i %></a>
+                        <a class="page-link" href="user_list.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>"><%= i %></a>
                     </li>
                 <% } %>
                 <% if (currentpage < totalPages) { %>
-                    <li class="page-item"><a class="page-link" href="qna_answer_list.jsp?page=<%= currentpage + 1 %>">다음</a></li>
+                    <li class="page-item"><a class="page-link" href="user_list.jsp?page=<%= currentpage + 1 %>&search=<%= search != null ? search : "" %>">다음</a></li>
                 <% } %>
             </ul>
         </nav>

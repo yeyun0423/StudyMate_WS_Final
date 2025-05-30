@@ -13,6 +13,8 @@ public class BoardPostDTO {
     private Timestamp createdAt;   // 작성일시
     private boolean isPrivate;
     private String status; // Q&A 답변 상태 
+    private int views;
+    private int commentCount;
     
     public int getPostId() {
         return postId;
@@ -89,4 +91,16 @@ public class BoardPostDTO {
 	public void setStatus(String status) {
 		this.status = status;
 	}
-}
+	public int getViews() {
+		return views;
+	}
+	public void setViews(int views) {
+		this.views = views;
+	}
+	public int getCommentCount() {
+		return commentCount;
+	}
+	public void setCommentCount(int commentCount) {
+		this.commentCount = commentCount;
+	}
+ }

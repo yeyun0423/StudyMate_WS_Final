@@ -230,5 +230,79 @@ public class UserDAO {
         return list;
     }
     
+ // 이름 또는 아이디에 검색어가 포함된 유저 리스트를 페이징으로 가져오기
+    public List<UserDTO> searchUsersByPage(String keyword, int page, int limit) {
+        List<UserDTO> list = new ArrayList<>();
+        String sql = "SELECT * FROM user WHERE user_id LIKE ? OR name LIKE ? ORDER BY join_date DESC LIMIT ?, ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "%" + keyword + "%");
+            pstmt.setString(2, "%" + keyword + "%");
+            pstmt.setInt(3, (page - 1) * limit);
+            pstmt.setInt(4, limit);
+
+            ResultSet rs = pstmt.executeQuery();
+            while (rs.next()) {
+                UserDTO u = new UserDTO();
+                u.setUserId(rs.getString("user_id"));
+                u.setName(rs.getString("name"));
+                u.setPassword(rs.getString("password"));
+                u.setJoinDate(rs.getTimestamp("join_date"));
+                list.add(u);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    // 검색 결과 총 유저 수 반환
+    public int getSearchUserCount(String keyword) {
+        int count = 0;
+        String sql = "SELECT COUNT(*) FROM user WHERE user_id LIKE ? OR name LIKE ?";
+        try (Connection conn = DBUtil.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(1, "%" + keyword + "%");
+            pstmt.setString(2, "%" + keyword + "%");
+
+            ResultSet rs = pstmt.executeQuery();
+            if (rs.next()) {
+                count = rs.getInt(1);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return count;
+    }
+
+    // 관리자가 전체 유저 목록에서 삭제 버튼 누를 시
+    public void deleteAllUserData(String userId) {
+        try (Connection conn = DBUtil.getConnection()) {
+            // 1. 게시글 삭제
+            try (PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM board_post WHERE writer_id = ?")) {
+                stmt1.setString(1, userId);
+                stmt1.executeUpdate();
+            }
+
+            // 2. 시간표 삭제
+            try (PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM timetable WHERE user_id = ?")) {
+                stmt2.setString(1, userId);
+                stmt2.executeUpdate();
+            }
+
+            // 3. Q&A 댓글 삭제 (만약 있으면)
+            try (PreparedStatement stmt3 = conn.prepareStatement("DELETE FROM board_reply WHERE writer_id = ?")) {
+                stmt3.setString(1, userId);
+                stmt3.executeUpdate();
+            }
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

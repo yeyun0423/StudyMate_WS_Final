@@ -123,8 +123,7 @@
 <servlet-mapping>
     <servlet-name>ProfileImageUploadServlet</servlet-name>
     <url-pattern>/profileUpload</url-pattern>
-</servlet-mapping>
-  
+</servlet-mapping>  
 
   <!-- 프로필 이미지 삭제 -->
   <servlet>
@@ -168,6 +167,7 @@
   <extension>js</extension>
   <mime-type>application/javascript</mime-type>
 </mime-mapping>
+  
   
 
 </web-app>

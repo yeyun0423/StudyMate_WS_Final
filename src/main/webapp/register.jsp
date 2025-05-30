@@ -3,7 +3,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>StudyMate 회원가입</title>
+    <title>[StudyMate 회원가입]</title>
 
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
