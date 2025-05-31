@@ -2,7 +2,7 @@
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
-         https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
          version="5.0">
 
   <!-- 로그인 -->
@@ -24,12 +24,12 @@
     <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
-  
-    <!-- 관리자 코드 -->
+
+  <!-- 관리자 코드 -->
   <context-param>
     <param-name>adminCode</param-name>
     <param-value>1234</param-value>
-</context-param>
+  </context-param>
 
   <!-- 아이디 중복 확인 -->
   <servlet>
@@ -40,59 +40,36 @@
     <servlet-name>CheckIdServlet</servlet-name>
     <url-pattern>/check-id</url-pattern>
   </servlet-mapping>
-  
-  <!-- UTF-8 인코딩 필터 -->
-<filter>
-  <filter-name>EncodingFilter</filter-name>
-  <filter-class>filter.EncodingFilter</filter-class>
-</filter>
-<filter-mapping>
-  <filter-name>EncodingFilter</filter-name>
-  <url-pattern>/*</url-pattern>
-</filter-mapping>
 
-<!-- 로그인 체크 필터 -->
-<!-- <filter>
-  <filter-name>LoginCheckFilter</filter-name>
-  <filter-class>filter.LoginCheckFilter</filter-class>
-</filter>
-<filter-mapping>
-  <filter-name>LoginCheckFilter</filter-name>
-  <url-pattern>/*</url-pattern>
-</filter-mapping> -->
+  <!-- UTF-8 필터 -->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
 
-<!-- 관리자 전용 접근 필터 -->
-<filter>
-  <filter-name>AdminAccessFilter</filter-name>
-  <filter-class>filter.AdminAccessFilter</filter-class>
-</filter>
-<filter-mapping>
-  <filter-name>AdminAccessFilter</filter-name>
-  <url-pattern>/admin/*</url-pattern>
-</filter-mapping>
+  <!-- 관리자 전용 접근 필터 -->
+  <filter>
+    <filter-name>AdminAccessFilter</filter-name>
+    <filter-class>filter.AdminAccessFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AdminAccessFilter</filter-name>
+    <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
 
-<!-- 회원 탈퇴  -->
-<servlet>
-  <servlet-name>DeleteAccountServlet</servlet-name>
-  <servlet-class>controller.DeleteAccountServlet</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>DeleteAccountServlet</servlet-name>
-  <url-pattern>/deleteAccount</url-pattern>
-</servlet-mapping>
-
-  
-  
-    <!--다국어처리 -->
-   <servlet>
-  <servlet-name>changeLang</servlet-name>
-  <servlet-class>controller.ChangeLangServlet</servlet-class>
-</servlet>
-
-<servlet-mapping>
-  <servlet-name>changeLang</servlet-name>
-  <url-pattern>/changeLang</url-pattern>
-</servlet-mapping>
+  <!-- 다국어 처리 -->
+  <servlet>
+    <servlet-name>changeLang</servlet-name>
+    <servlet-class>controller.ChangeLangServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>changeLang</servlet-name>
+    <url-pattern>/changeLang</url-pattern>
+  </servlet-mapping>
 
   <!-- 시간표 등록 -->
   <servlet>
@@ -113,17 +90,16 @@
     <servlet-name>ProfileUpdateServlet</servlet-name>
     <url-pattern>/updateProfile</url-pattern>
   </servlet-mapping>
-  
-  <!--프로필 이미지 등록 -->
-<servlet>
+
+  <!-- 프로필 이미지 업로드 -->
+  <servlet>
     <servlet-name>ProfileImageUploadServlet</servlet-name>
     <servlet-class>controller.ProfileImageUploadServlet</servlet-class>
-</servlet>
-
-<servlet-mapping>
+  </servlet>
+  <servlet-mapping>
     <servlet-name>ProfileImageUploadServlet</servlet-name>
     <url-pattern>/profileUpload</url-pattern>
-</servlet-mapping>  
+  </servlet-mapping>
 
   <!-- 프로필 이미지 삭제 -->
   <servlet>
@@ -137,37 +113,37 @@
 
   <!-- JSP 서블릿 (파일 업로드 포함) -->
   <servlet>
-  <servlet-name>jsp</servlet-name>
-  <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
-  <init-param>
-    <param-name>fork</param-name>
-    <param-value>false</param-value>
-  </init-param>
-  <multipart-config>
-    <max-file-size>10485760</max-file-size>
-    <max-request-size>52428800</max-request-size>
-    <file-size-threshold>1024</file-size-threshold>
-  </multipart-config>
-</servlet>
+    <servlet-name>jsp</servlet-name>
+    <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+    <init-param>
+      <param-name>fork</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>1024</file-size-threshold>
+    </multipart-config>
+  </servlet>
   <servlet-mapping>
     <servlet-name>jsp</servlet-name>
     <url-pattern>*.jsp</url-pattern>
   </servlet-mapping>
-  
+
+  <!-- 정적 리소스 -->
   <servlet-mapping>
     <servlet-name>default</servlet-name>
     <url-pattern>/resources/*</url-pattern>
-</servlet-mapping>
+  </servlet-mapping>
+
+  <!-- MIME 설정 -->
   <mime-mapping>
-  
-  <extension>css</extension>
-  <mime-type>text/css</mime-type>
-</mime-mapping>
-<mime-mapping>
-  <extension>js</extension>
-  <mime-type>application/javascript</mime-type>
-</mime-mapping>
-  
-  
+    <extension>css</extension>
+    <mime-type>text/css</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>js</extension>
+    <mime-type>application/javascript</mime-type>
+  </mime-mapping>
 
 </web-app>

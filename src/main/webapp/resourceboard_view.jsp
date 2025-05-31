@@ -1,5 +1,5 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
-<%@ page import="dao.BoardPostDAO, dto.BoardPostDTO" %>
+<%@ page import="dao.BoardPostDAO, dto.BoardPostDTO, java.net.URLEncoder" %>
 <%
     request.setCharacterEncoding("UTF-8");
 
@@ -66,7 +66,8 @@
             <label class="form-label fw-bold" id="labelResourceFile">첨부파일</label>
             <p class="form-control" id="resourceFileArea">
                 <% if (post.getFilename() != null && !post.getFilename().isEmpty()) { %>
-                    <a id="resourceFileLink" href="upload/<%= post.getFilename() %>" download>
+                    <a id="resourceFileLink"
+                       href="<%= request.getContextPath() %>/DownloadServlet?file=<%= URLEncoder.encode(post.getFilename(), "UTF-8") %>">
                         <%= post.getFilename().substring(post.getFilename().indexOf("_") + 1) %>
                     </a>
                 <% } else { %>

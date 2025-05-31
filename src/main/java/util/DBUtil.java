@@ -1,10 +1,6 @@
 package util;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 
 public class DBUtil {
 
@@ -20,6 +16,7 @@ public class DBUtil {
         }
     }
 
+    // 커넥션 생성
     public static Connection getConnection() {
         try {
             return DriverManager.getConnection(URL, USER, PASSWORD);
@@ -48,8 +45,32 @@ public class DBUtil {
         }
     }
 
-    // Statement, Connection 닫기 (ResultSet 없는 경우)
+    // Statement, Connection 닫기
     public static void close(Statement stmt, Connection conn) {
         close(null, stmt, conn);
+    }
+
+    // ResultSet, PreparedStatement, Connection 닫기
+    public static void close(ResultSet rs, PreparedStatement pstmt, Connection conn) {
+        try {
+            if (rs != null) rs.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (pstmt != null) pstmt.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        try {
+            if (conn != null) conn.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // PreparedStatement, Connection 닫기
+    public static void close(PreparedStatement pstmt, Connection conn) {
+        close(null, pstmt, conn);
     }
 }

@@ -21,17 +21,12 @@
         return;
     }
 
-    // DB에서 다시 확인하고 세션 갱신
     if (profileImage == null || profileImage.trim().isEmpty()) {
         profileImage = new UserDAO().getProfileImageById(userId);
         if (profileImage == null || profileImage.trim().isEmpty()) {
             profileImage = "default.png";
         }
         session.setAttribute("profileImage", profileImage);
-    }
-
-    if (profileImage == null || profileImage.trim().isEmpty()) {
-        profileImage = "default.png";
     }
 
     UserDTO user = new UserDAO().getUserById(userId);
@@ -77,6 +72,7 @@
 
     <div class="section-card">
         <div class="row">
+            <!-- 프로필 이미지 영역 -->
             <div class="col-md-4 text-center" style="margin-top: 40px;">
                 <div class="mb-4">
                     <img src="<%= request.getContextPath() %>/resources/images/<%= profileImage %>"
@@ -88,9 +84,7 @@
                     <div class="input-group">
                         <input type="file" class="form-control" name="profileImage" required>
                         <input type="hidden" name="userId" value="<%= userId %>">
-                        <button type="submit" class="btn btn-outline-primary">
-                            <i class="bi bi-upload"></i> 업로드
-                        </button>
+                        <button type="submit" class="btn btn-outline-primary">업로드</button>
                     </div>
                 </form>
 
@@ -101,6 +95,7 @@
                 </form>
             </div>
 
+            <!-- 사용자 정보 수정 영역 -->
             <div class="col-md-8">
                 <form action="<%= request.getContextPath() %>/updateProfile" method="post">
                     <div class="mb-3">
@@ -124,14 +119,17 @@
                         <input type="password" name="confirmPassword" class="form-control" placeholder="새 비밀번호를 다시 입력하세요">
                     </div>
                     <input type="hidden" name="userId" value="<%= userId %>">
+
                     <div class="d-flex gap-2 mt-4 justify-content-end align-items-center">
                         <button type="submit" class="btn btn-primary btn-sm px-4">저장</button>
-                        <form action="<%= request.getContextPath() %>/deleteAccount" method="post"
-                              onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="m-0">
-                            <input type="hidden" name="userId" value="<%= userId %>">
-                            <button type="submit" class="btn btn-outline-danger btn-sm px-3">회원 탈퇴</button>
-                        </form>
                     </div>
+                </form>
+
+                <!-- 🔥 회원 탈퇴는 form 분리! -->
+                <form action="<%= request.getContextPath() %>/deleteAccount" method="post"
+                      onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="text-end mt-2">
+                    <input type="hidden" name="userId" value="<%= userId %>">
+                    <button type="submit" class="btn btn-outline-danger btn-sm px-3">회원 탈퇴</button>
                 </form>
             </div>
         </div>

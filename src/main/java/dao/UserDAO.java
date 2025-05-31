@@ -279,32 +279,133 @@ public class UserDAO {
         return count;
     }
 
-    // 관리자가 전체 유저 목록에서 삭제 버튼 누를 시
+ // 관리자가 전체 유저 목록에서 삭제 버튼 누를 시
     public void deleteAllUserData(String userId) {
-        try (Connection conn = DBUtil.getConnection()) {
-            // 1. 게시글 삭제
-            try (PreparedStatement stmt1 = conn.prepareStatement("DELETE FROM board_post WHERE writer_id = ?")) {
-                stmt1.setString(1, userId);
-                stmt1.executeUpdate();
-            }
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        try {
+            conn = DBUtil.getConnection();
+            conn.setAutoCommit(false); // ✅ 트랜잭션 시작
 
-            // 2. 시간표 삭제
-            try (PreparedStatement stmt2 = conn.prepareStatement("DELETE FROM timetable WHERE user_id = ?")) {
-                stmt2.setString(1, userId);
-                stmt2.executeUpdate();
-            }
+            // 1. Q&A 답변 삭제 (사용자의 글에 달린 관리자 답변 포함)
+            String deleteReplies = "DELETE FROM board_reply WHERE post_id IN (SELECT post_id FROM board_post WHERE writer_id = ?)";
+            pstmt = conn.prepareStatement(deleteReplies);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
 
-            // 3. Q&A 댓글 삭제 (만약 있으면)
-            try (PreparedStatement stmt3 = conn.prepareStatement("DELETE FROM board_reply WHERE writer_id = ?")) {
-                stmt3.setString(1, userId);
-                stmt3.executeUpdate();
-            }
+            // 2. 사용자의 게시글 삭제
+            String deletePosts = "DELETE FROM board_post WHERE writer_id = ?";
+            pstmt = conn.prepareStatement(deletePosts);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
 
+            // 3. 시간표 삭제
+            String deleteTimetable = "DELETE FROM timetable WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteTimetable);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 4. 스터디 멤버 삭제
+            String deleteStudyMember = "DELETE FROM study_member WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteStudyMember);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 5. 사용자가 쓴 댓글 삭제
+            String deleteComments = "DELETE FROM board_comment WHERE writer_id = ?";
+            pstmt = conn.prepareStatement(deleteComments);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 6. 유저 자체 삭제
+            String deleteUser = "DELETE FROM user WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteUser);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            conn.commit(); // ✅ 트랜잭션 커밋
+        } catch (Exception e) {
+            e.printStackTrace();
+            try {
+                if (conn != null) conn.rollback(); // ❌ 예외 발생 시 롤백
+            } catch (Exception rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+        } finally {
+            DBUtil.close(pstmt, conn);
+        }
+    }
+    
+    public boolean deleteUserAndRelatedData(String userId) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = DBUtil.getConnection();
+            conn.setAutoCommit(false); // ✅ 트랜잭션 시작
+
+            // 1. Q&A 댓글 삭제 (자신이 쓴 게시글에 달린 관리자 답변)
+            String deleteReplies = "DELETE FROM board_reply WHERE post_id IN (SELECT post_id FROM board_post WHERE writer_id = ?)";
+            pstmt = conn.prepareStatement(deleteReplies);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 2. 자신이 쓴 게시글 삭제
+            String deletePosts = "DELETE FROM board_post WHERE writer_id = ?";
+            pstmt = conn.prepareStatement(deletePosts);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 3. 시간표 삭제
+            String deleteTimetable = "DELETE FROM timetable WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteTimetable);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 4. 스터디 멤버 삭제
+            String deleteStudyMember = "DELETE FROM study_member WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteStudyMember);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 5. 자신이 쓴 댓글 삭제
+            String deleteComments = "DELETE FROM board_comment WHERE writer_id = ?";
+            pstmt = conn.prepareStatement(deleteComments);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 6. 사용자 삭제
+            String deleteUser = "DELETE FROM user WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteUser);
+            pstmt.setString(1, userId);
+            int rows = pstmt.executeUpdate();
+            pstmt.close();
+
+            conn.commit(); // ✅ 트랜잭션 커밋
+            return rows > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
+            try {
+                if (conn != null) conn.rollback(); // ❌ 예외 시 롤백
+            } catch (Exception rollbackEx) {
+                rollbackEx.printStackTrace();
+            }
+            return false;
+        } finally {
+            DBUtil.close(pstmt, conn);
         }
     }
-
 
 }

@@ -15,7 +15,7 @@ public class BoardPostDTO {
     private String status; // Q&A 답변 상태 
     private int views;
     private int commentCount;
-    
+   
     public int getPostId() {
         return postId;
     }
@@ -103,4 +103,5 @@ public class BoardPostDTO {
 	public void setCommentCount(int commentCount) {
 		this.commentCount = commentCount;
 	}
+
  }

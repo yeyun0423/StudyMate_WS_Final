@@ -87,7 +87,7 @@ function fetchRecommendedFriends() {
 
                 // 프로필 이미지
                 const img = document.createElement("img");
-                img.src = `${CONTEXT_PATH}/resources/images/${friend.profileImage}`;
+                img.src = `${CONTEXT_PATH}/resources/images/$encodeURIComponent{friend.profileImage}`;
                 img.alt = "profile";
                 img.className = "rounded-circle";
                 img.style.width = "60px";

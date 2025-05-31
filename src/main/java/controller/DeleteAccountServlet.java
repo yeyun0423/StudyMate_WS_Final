@@ -1,36 +1,34 @@
 package controller;
 
 import dao.UserDAO;
-import jakarta.servlet.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
+
 import java.io.IOException;
 
+@WebServlet("/deleteAccount")  // ✅ 어노테이션 등록만 사용
 public class DeleteAccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-        throws ServletException, IOException {
+            throws ServletException, IOException {
 
-        request.setCharacterEncoding("UTF-8");
-        HttpSession session = request.getSession();
-        String userId = (String) session.getAttribute("userId");
-        
-        if (userId == null) {
-            userId = request.getParameter("userId"); // fallback 처리
+        String userId = request.getParameter("userId");
+
+        if (userId == null || userId.trim().isEmpty()) {
+            response.sendRedirect("profile.jsp");
+            return;
         }
-        
 
-        if (userId != null) {
-            UserDAO dao = new UserDAO();
-            boolean deleted = dao.deleteUser(userId);
+        boolean success = new UserDAO().deleteUserAndRelatedData(userId);
 
-            if (deleted) {
-                session.invalidate();
-                response.sendRedirect("login.jsp?message=deleted");
-            } else {
-                response.sendRedirect("profile.jsp?error=deletefail");
-            }
+        if (success) {
+            HttpSession session = request.getSession();
+            session.invalidate(); // 세션 초기화
+            response.sendRedirect("login.jsp"); // 로그인 페이지로 이동
         } else {
-            response.sendRedirect("login.jsp");
+            response.setContentType("text/html;charset=UTF-8");
+            response.getWriter().println("<script>alert('회원 탈퇴에 실패했습니다.'); history.back();</script>");
         }
     }
 }
