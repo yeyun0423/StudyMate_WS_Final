@@ -59,7 +59,7 @@
             width: 200px;
             text-align: center;
         }
-        tkdy
+        
     </style>
 </head>
 <body>

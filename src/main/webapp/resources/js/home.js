@@ -78,21 +78,25 @@ function fetchRecommendedFriends() {
                 card.style.width = "10rem";
                 card.style.height = "220px";
 
-                // 체크박스 (맨 위)
+                // 체크박스
                 const checkbox = document.createElement("input");
                 checkbox.type = "checkbox";
                 checkbox.className = "form-check-input friendCheckbox mb-2";
                 checkbox.value = friend.userId;
                 if (friend.joined) checkbox.disabled = true;
 
-                // 프로필 이미지
+                // 이미지 (undefined 대비 및 fallback)
                 const img = document.createElement("img");
-                img.src = `${CONTEXT_PATH}/resources/images/$encodeURIComponent{friend.profileImage}`;
+                const imageFile = friend.profileImage ? friend.profileImage : "default.png";
+                img.src = `${CONTEXT_PATH}/resources/images/${imageFile}`;
                 img.alt = "profile";
                 img.className = "rounded-circle";
                 img.style.width = "60px";
                 img.style.height = "60px";
                 img.style.objectFit = "cover";
+                img.onerror = function () {
+                    this.src = `${CONTEXT_PATH}/resources/images/default.png`;
+                };
 
                 // 이름
                 const name = document.createElement("div");
@@ -104,17 +108,17 @@ function fetchRecommendedFriends() {
                 userId.className = "text-muted small";
                 userId.textContent = `(${friend.userId})`;
 
-                // 참여중 배지 (맨 아래)
+                // 참여중 배지
                 const badge = document.createElement("div");
                 badge.className = "mt-auto pt-2";
                 if (friend.joined) {
                     badge.classList.add("badge", "bg-secondary");
                     badge.textContent = "참여중";
                 } else {
-                    badge.innerHTML = "&nbsp;"; // 공간 고정
+                    badge.innerHTML = "&nbsp;";
                 }
 
-                // 카드 구성
+                // 카드 조립
                 card.appendChild(checkbox);
                 card.appendChild(img);
                 card.appendChild(name);
