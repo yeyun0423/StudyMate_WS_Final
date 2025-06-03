@@ -308,32 +308,63 @@ public class UserDAO {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // 4. 스터디 멤버 삭제
-            String deleteStudyMember = "DELETE FROM study_member WHERE user_id = ?";
-            pstmt = conn.prepareStatement(deleteStudyMember);
-            pstmt.setString(1, userId);
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            // 5. 사용자가 쓴 댓글 삭제
+            // 4. 사용자가 쓴 댓글 삭제
             String deleteComments = "DELETE FROM board_comment WHERE writer_id = ?";
             pstmt = conn.prepareStatement(deleteComments);
             pstmt.setString(1, userId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            // 6. 유저 자체 삭제
+            // 5. 본인이 속한 study_member 삭제
+            String deleteOwnStudyMember = "DELETE FROM study_member WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteOwnStudyMember);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // ✅ 6. 본인이 만든 그룹의 모든 멤버 삭제
+            String deleteMembersInOwnedGroups = """
+                DELETE FROM study_member 
+                WHERE group_id IN (
+                    SELECT group_id FROM study_group WHERE created_by = ?
+                )
+            """;
+            pstmt = conn.prepareStatement(deleteMembersInOwnedGroups);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // ✅ 7. 본인이 만든 그룹과 연결된 match_log 삭제
+            String deleteMatchLog = """
+                DELETE FROM match_log 
+                WHERE group_id IN (
+                    SELECT group_id FROM study_group WHERE created_by = ?
+                )
+            """;
+            pstmt = conn.prepareStatement(deleteMatchLog);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // ✅ 8. 본인이 만든 study_group 삭제
+            String deleteStudyGroup = "DELETE FROM study_group WHERE created_by = ?";
+            pstmt = conn.prepareStatement(deleteStudyGroup);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 9. 사용자 삭제
             String deleteUser = "DELETE FROM user WHERE user_id = ?";
             pstmt = conn.prepareStatement(deleteUser);
             pstmt.setString(1, userId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            conn.commit(); // ✅ 트랜잭션 커밋
+            conn.commit(); // ✅ 커밋
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                if (conn != null) conn.rollback(); // ❌ 예외 발생 시 롤백
+                if (conn != null) conn.rollback(); // ❌ 롤백
             } catch (Exception rollbackEx) {
                 rollbackEx.printStackTrace();
             }
@@ -341,7 +372,7 @@ public class UserDAO {
             DBUtil.close(pstmt, conn);
         }
     }
-    
+
     public boolean deleteUserAndRelatedData(String userId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -350,14 +381,14 @@ public class UserDAO {
             conn = DBUtil.getConnection();
             conn.setAutoCommit(false); // ✅ 트랜잭션 시작
 
-            // 1. Q&A 댓글 삭제 (자신이 쓴 게시글에 달린 관리자 답변)
+            // 1. Q&A 댓글 삭제
             String deleteReplies = "DELETE FROM board_reply WHERE post_id IN (SELECT post_id FROM board_post WHERE writer_id = ?)";
             pstmt = conn.prepareStatement(deleteReplies);
             pstmt.setString(1, userId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            // 2. 자신이 쓴 게시글 삭제
+            // 2. 게시글 삭제
             String deletePosts = "DELETE FROM board_post WHERE writer_id = ?";
             pstmt = conn.prepareStatement(deletePosts);
             pstmt.setString(1, userId);
@@ -371,34 +402,65 @@ public class UserDAO {
             pstmt.executeUpdate();
             pstmt.close();
 
-            // 4. 스터디 멤버 삭제
-            String deleteStudyMember = "DELETE FROM study_member WHERE user_id = ?";
-            pstmt = conn.prepareStatement(deleteStudyMember);
-            pstmt.setString(1, userId);
-            pstmt.executeUpdate();
-            pstmt.close();
-
-            // 5. 자신이 쓴 댓글 삭제
+            // 4. 댓글 삭제
             String deleteComments = "DELETE FROM board_comment WHERE writer_id = ?";
             pstmt = conn.prepareStatement(deleteComments);
             pstmt.setString(1, userId);
             pstmt.executeUpdate();
             pstmt.close();
 
-            // 6. 사용자 삭제
+            // 5. 본인이 속한 study_member 삭제
+            String deleteOwnStudyMember = "DELETE FROM study_member WHERE user_id = ?";
+            pstmt = conn.prepareStatement(deleteOwnStudyMember);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // ✅ 6. 본인이 만든 그룹에 포함된 모든 study_member 삭제
+            String deleteMembersInOwnedGroups = """
+                DELETE FROM study_member 
+                WHERE group_id IN (
+                    SELECT group_id FROM study_group WHERE created_by = ?
+                )
+            """;
+            pstmt = conn.prepareStatement(deleteMembersInOwnedGroups);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // ✅ 7. 본인이 만든 그룹과 관련된 match_log 삭제
+            String deleteMatchLog = """
+                DELETE FROM match_log 
+                WHERE group_id IN (
+                    SELECT group_id FROM study_group WHERE created_by = ?
+                )
+            """;
+            pstmt = conn.prepareStatement(deleteMatchLog);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // ✅ 8. 본인이 만든 study_group 삭제
+            String deleteStudyGroup = "DELETE FROM study_group WHERE created_by = ?";
+            pstmt = conn.prepareStatement(deleteStudyGroup);
+            pstmt.setString(1, userId);
+            pstmt.executeUpdate();
+            pstmt.close();
+
+            // 9. 사용자 계정 삭제
             String deleteUser = "DELETE FROM user WHERE user_id = ?";
             pstmt = conn.prepareStatement(deleteUser);
             pstmt.setString(1, userId);
             int rows = pstmt.executeUpdate();
             pstmt.close();
 
-            conn.commit(); // ✅ 트랜잭션 커밋
+            conn.commit(); // ✅ 커밋
             return rows > 0;
 
         } catch (Exception e) {
             e.printStackTrace();
             try {
-                if (conn != null) conn.rollback(); // ❌ 예외 시 롤백
+                if (conn != null) conn.rollback(); // ❌ 롤백
             } catch (Exception rollbackEx) {
                 rollbackEx.printStackTrace();
             }
@@ -407,5 +469,6 @@ public class UserDAO {
             DBUtil.close(pstmt, conn);
         }
     }
+
 
 }
