@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import dao.BoardPostDAO;
 import dto.BoardPostDTO;
 
-@WebServlet("/QnABoardWriteServlet")
+
 public class QnABoardWriteServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

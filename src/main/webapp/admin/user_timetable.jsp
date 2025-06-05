@@ -50,11 +50,18 @@
     <link rel="stylesheet" href="resources/css/home.css?v=1">
     <script src="resources/js/bootstrap.bundle.min.js"></script>
 </head>
+<<<<<<< Updated upstream:src/main/webapp/user_timetable.jsp
 <body class="bg-light">
 <div class="container py-4">
 
     <!-- ✅ 공통 상단바 -->
     <jsp:include page="navbar.jsp" />
+=======
+<body>
+<div class="container py-5">
+    <jsp:include page="/navbar.jsp" />
+    
+>>>>>>> Stashed changes:src/main/webapp/admin/user_timetable.jsp
 
     <!-- ✅ 제목 및 뒤로가기 버튼 -->
     <div class="d-flex justify-content-between align-items-center mb-4">

@@ -5,6 +5,10 @@ import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import java.io.IOException;
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 public class DeleteAccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

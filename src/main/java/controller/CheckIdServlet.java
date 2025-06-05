@@ -6,6 +6,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 
 public class CheckIdServlet extends HttpServlet {
+	
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {
 

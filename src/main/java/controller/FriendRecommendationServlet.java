@@ -11,11 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 import util.DBUtil;
 
-@WebServlet("/getRecommendedFriends")
+
 public class FriendRecommendationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-        String subject = request.getParameter("subject");
+    	 System.out.println("FriendRecommendationServlet 진입"); 
+    	String subject = request.getParameter("subject");
         String currentUserId = (String) request.getSession().getAttribute("userId");
 
         response.setContentType("application/json; charset=UTF-8");

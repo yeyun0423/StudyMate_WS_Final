@@ -4,7 +4,7 @@ import dao.UserDAO;
 import dto.UserDTO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import util.SHA256Util;
+import util.PasswordHasher;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -38,13 +38,13 @@ public class ProfileUpdateServlet extends HttpServlet {
 
             // 비밀번호 변경 요청이 있을 경우 검증
             if (newPw != null && !newPw.isEmpty()) {
-                if (!SHA256Util.encrypt(currentPw).equals(user.getPassword())) {
+                if (!PasswordHasher.encrypt(currentPw).equals(user.getPassword())) {
                     response.sendRedirect("profile.jsp?error=wrongpassword");
                     return;
                 }
 
                 if (newPw.equals(confirmPw)) {
-                    user.setPassword(SHA256Util.encrypt(newPw));
+                    user.setPassword(PasswordHasher.encrypt(newPw));
                 } else {
                     response.sendRedirect("profile.jsp?error=nomatch");
                     return;

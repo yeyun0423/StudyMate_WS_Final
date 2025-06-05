@@ -2,7 +2,7 @@ package dao;
 
 import dto.UserDTO;
 import util.DBUtil;
-import util.SHA256Util;
+import util.PasswordHasher;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -57,7 +57,7 @@ public class UserDAO {
 
             if (rs.next()) {
                 String storedHash = rs.getString("password");
-                String inputHash = SHA256Util.encrypt(password);
+                String inputHash = PasswordHasher.encrypt(password);
                 return storedHash.equals(inputHash);
             }
         } catch (Exception e) {

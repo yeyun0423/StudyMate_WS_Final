@@ -8,7 +8,7 @@ import jakarta.servlet.http.*;
 import java.io.IOException;
 import jakarta.servlet.annotation.WebServlet;
 
-@WebServlet("/ReplyInsertServlet")
+
 public class ReplyInsertServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

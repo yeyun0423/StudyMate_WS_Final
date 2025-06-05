@@ -3,7 +3,7 @@ package util;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class SHA256Util {
+public class PasswordHasher {
 
     public static String encrypt(String input) {
         try {

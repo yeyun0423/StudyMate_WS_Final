@@ -40,7 +40,7 @@
     <div class="container-fluid">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">
             <li class="nav-item">
-                <a id="menuHome" class="nav-link fw-bold" href="home.jsp">
+                <a id="menuHome" class="nav-link fw-bold" href="<%= request.getContextPath() %>/home.jsp">
                     <fmt:message key="menuHome" />
                 </a>
             </li>
@@ -50,9 +50,15 @@
                     <fmt:message key="menuMyPage" />
                 </a>
                 <ul class="dropdown-menu">
+<<<<<<< Updated upstream
                     <li><a id="menuStudy" class="dropdown-item" href="#"><fmt:message key="menuStudy" /></a></li>
                     <li><a id="menuProfile" class="dropdown-item" href="profile.jsp"><fmt:message key="menuProfile" /></a></li>
                     <li><a id="menuTimetable" class="dropdown-item" href="timetable.jsp"><fmt:message key="menuTimetable" /></a></li>
+=======
+                    <li><a id="menuStudy" class="dropdown-item" href="<%= request.getContextPath() %>/mystudygroup.jsp"><fmt:message key="menuStudy" /></a></li>
+                    <li><a id="menuProfile" class="dropdown-item" href="<%= request.getContextPath() %>/profile.jsp"><fmt:message key="menuProfile" /></a></li>
+                    <li><a id="menuTimetable" class="dropdown-item" href="<%= request.getContextPath() %>/timetable.jsp"><fmt:message key="menuTimetable" /></a></li>
+>>>>>>> Stashed changes
                 </ul>
             </li>
 
@@ -61,9 +67,9 @@
                     <fmt:message key="menuBoard" />
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a id="menuFree" class="dropdown-item" href="freeboard.jsp"><fmt:message key="menuFree" /></a></li>
-                    <li><a id="menuFiles" class="dropdown-item" href="resourceboard.jsp"><fmt:message key="menuFiles" /></a></li>
-                    <li><a id="menuQna" class="dropdown-item" href="qnaboard.jsp"><fmt:message key="menuQna" /></a></li>
+                    <li><a id="menuFree" class="dropdown-item" href="<%= request.getContextPath() %>/freeboard.jsp"><fmt:message key="menuFree" /></a></li>
+                    <li><a id="menuFiles" class="dropdown-item" href="<%= request.getContextPath() %>/resourceboard.jsp"><fmt:message key="menuFiles" /></a></li>
+                    <li><a id="menuQna" class="dropdown-item" href="<%= request.getContextPath() %>/qnaboard.jsp"><fmt:message key="menuQna" /></a></li>
                 </ul>
             </li>
 
@@ -73,9 +79,15 @@
                         <fmt:message key="menuAdmin" />
                     </a>
                     <ul class="dropdown-menu">
+<<<<<<< Updated upstream
                         <li><a id="menuUserList" class="dropdown-item" href="user_list.jsp"><fmt:message key="menuUserList" /></a></li>
                         <li><a id="menuMatchList" class="dropdown-item" href="#"><fmt:message key="menuMatchList" /></a></li>
                         <li><a id="menuQnaAnswer" class="dropdown-item" href="qna_answer_list.jsp"><fmt:message key="menuQnaAnswer" /></a></li>
+=======
+                        <li><a id="menuUserList" class="dropdown-item" href="<%=request.getContextPath()%>/admin/user_list.jsp"><fmt:message key="menuUserList" /></a></li>
+                        <li><a id="menuMatchList" class="dropdown-item" href="<%=request.getContextPath()%>/admin/matchlist.jsp"><fmt:message key="menuMatchList" /></a></li>
+                        <li><a id="menuQnaAnswer" class="dropdown-item" href="<%=request.getContextPath()%>/admin/qna_answer_list.jsp"><fmt:message key="menuQnaAnswer" /></a></li>
+>>>>>>> Stashed changes
                     </ul>
                 </li>
             <% } %>
@@ -86,7 +98,7 @@
             <!-- KR/EN 언어 스위치 -->
             <div class="lang-toggle d-flex align-items-center gap-1">
                 <span class="me-1">KR</span>
-                <form action="changeLang" method="post" class="m-0 p-0">
+                <form action="<%= request.getContextPath() %>/changeLang" method="post" class="m-0 p-0">
                     <input type="hidden" name="user_id" value="<%= userId %>" />
                     <input type="hidden" id="lang_code" name="lang_code" value="ko" />
                     <div class="form-check form-switch mb-0">
@@ -102,12 +114,16 @@
             <span id="welcomeText" class="fw-bold">
                 <%= userName != null ? userName + "님, " : "" %><fmt:message key="menuWelcome" />
             </span>
+<<<<<<< Updated upstream
            <button id="logoutBtn" class="btn btn-primary btn-sm" onclick="location.href='logout'">로그아웃</button>
            
+=======
+            <button id="logoutBtn" class="btn btn-primary btn-sm"
+                    onclick="location.href='<%= request.getContextPath() %>/logout'"><fmt:message key="logout" /></button>
+>>>>>>> Stashed changes
         </div>
     </div>
 </nav>
-
 <script>
     const userId = "<%= userId != null ? userId : "" %>";
     const userName = "<%= userName != null ? userName : "" %>";

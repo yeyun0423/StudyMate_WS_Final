@@ -6,7 +6,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/logout")
+
 public class LogoutServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -30,6 +30,6 @@ public class LogoutServlet extends HttpServlet {
         }
 
         // 로그아웃 후 로그인 페이지로 이동
-        response.sendRedirect("login.jsp");
+        response.sendRedirect(request.getContextPath() +"/login.jsp");
     }
 }

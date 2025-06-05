@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.sql.*;
 import java.util.*;
 
-@WebServlet("/RandomStudyServlet")
+
 public class RandomStudyServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
