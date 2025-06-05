@@ -19,28 +19,28 @@ public class LoginCheckFilter implements Filter {
         String uri = req.getRequestURI();
         System.out.println("[LoginCheckFilter] uri = " + uri);
 
-        // ✅ 1. 정적 자원은 무조건 통과 (이게 가장 위여야 함!)
+        //  1. 정적 자원은 무조건 통과 
         if (uri.matches(".*\\.(css|js|png|jpg|jpeg|gif|woff|woff2|ttf|svg|eot)$")
                 || uri.contains("/resources/")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // ✅ 2. 로그인/회원가입 페이지는 통과
+        // 2. 로그인/회원가입 페이지는 통과
         if (uri.endsWith("login.jsp") || uri.endsWith("register.jsp")
                 || uri.contains("/login") || uri.contains("/register")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // ✅ 3. 로그인 체크
+        // 3. 로그인 체크
         boolean isLoggedIn = session != null && session.getAttribute("userId") != null;
         if (!isLoggedIn) {
             res.sendRedirect(req.getContextPath() + "/login.jsp?error=notloggedin");
             return;
         }
 
-        // ✅ 4. 나머지는 통과
+        // 4. 나머지는 통과
         chain.doFilter(request, response);
     }
 }

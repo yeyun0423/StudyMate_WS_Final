@@ -7,7 +7,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/StudyExitServlet")
+
 public class StudyExitServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
         throws ServletException, IOException {

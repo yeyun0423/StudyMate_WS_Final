@@ -92,7 +92,7 @@
 </head>
 <body>
 <div class="container py-5">
-    <jsp:include page="navbar.jsp"/>
+     <jsp:include page="/navbar.jsp"/>
 
     <div class="table-card">
         <h3 class="fw-bold mb-4">💬 Q&A 답변 목록</h3>
@@ -140,10 +140,11 @@
                         <%= status %>
                     </td>
                     <td>
-                        <a href="qna_edit.jsp?id=<%= post.getPostId() %>" class="btn btn-warning btn-sm" title="답변 수정">수정</a>
-                        <a href="qna_delete.jsp?id=<%= post.getPostId() %>" class="btn btn-danger btn-sm" title="답변 삭제"
-                           <%= answered ? "onclick=\"return confirmDelete();\"" : "" %>>삭제</a>
-                    </td>
+    <a href="<%= request.getContextPath() %>/qna_edit.jsp?id=<%= post.getPostId() %>" class="btn btn-warning btn-sm" title="답변 수정">수정</a>
+    <a href="<%= request.getContextPath() %>/admin/qna_delete.jsp?id=<%= post.getPostId() %>" class="btn btn-danger btn-sm" title="답변 삭제"
+       <%= answered ? "onclick=\"return confirmDelete();\"" : "" %>>삭제</a>
+</td>
+                    
                 </tr>
             <% } %>
             </tbody>

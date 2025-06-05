@@ -59,7 +59,7 @@
 </head>
 <body>
 <div class="container py-5">
-    <jsp:include page="navbar.jsp"/>
+    <jsp:include page="/navbar.jsp"/>
 
     <div class="card-box">
         <h3 class="fw-bold mb-4">
@@ -127,7 +127,7 @@
 
         <!-- 목록 -->
         <div class="mt-4 text-end">
-            <a href="qna_answer_list.jsp" class="btn btn-secondary btn-sm">목록으로</a>
+            <a href="<%= request.getContextPath() %>/admin/qna_answer_list.jsp" class="btn btn-secondary btn-sm">목록으로</a>
         </div>
     </div>
 </div>

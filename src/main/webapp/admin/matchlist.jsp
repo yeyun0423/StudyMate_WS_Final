@@ -73,7 +73,7 @@
 </head>
 <body>
 <div class="container py-5">
-    <jsp:include page="navbar.jsp"/>
+    <jsp:include page="/navbar.jsp"/>
 
     <div class="table-card">
         <h3 class="fw-bold mb-3">🌐 전체 스터디 매칭 목록</h3>

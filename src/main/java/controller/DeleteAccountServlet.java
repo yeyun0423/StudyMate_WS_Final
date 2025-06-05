@@ -7,7 +7,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/deleteAccount")  // ✅ 어노테이션 등록만 사용
+
 public class DeleteAccountServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

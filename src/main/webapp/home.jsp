@@ -3,12 +3,11 @@
 <%@ page import="dto.TimetableDTO" %>
 <%@ page import="java.util.List" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <%
     String userId = (String) session.getAttribute("userId");
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
     String userName = null;
-    String lang = "ko";
 
     Cookie[] cookies = request.getCookies();
     if (cookies != null) {
@@ -32,8 +31,6 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <fmt:setLocale value="<%= lang %>" />
-    <fmt:setBundle basename="bundle.messages" />
     <meta charset="UTF-8">
     <title>StudyMate 홈페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -68,14 +65,14 @@
 
     <!-- 스터디 그룹 만들기 -->
     <div class="section-box">
-        <h3 id="titleStudy" class="section-title mb-4">
-            <i class="bi bi-people-fill text-primary me-2"></i>
-            <fmt:message key="home.title.study"/>
-        </h3>
+       <h3 id="titleStudy" class="section-title mb-4">
+        <i class="bi bi-people-fill text-primary me-2"></i>
+        스터디 그룹 만들기
+    </h3>
 
         <div class="d-flex flex-wrap align-items-center gap-4 mb-4">
             <select class="form-select w-auto" id="subjectSelect" onchange="fetchRecommendedFriends()">
-                <option selected disabled id="optionSubjectDefault"><fmt:message key="home.subject.select" /></option>
+                <option selected disabled id="optionSubjectDefault">과목 선택</option>
                 <c:forEach var="subject" items="${subjectList}">
                     <option value="${subject.subject}">${subject.subject}</option>
                 </c:forEach>
@@ -88,15 +85,15 @@
             </div>
         </div>
 
-        <h5 class="fw-bold mb-2" id="labelRecommended"><fmt:message key ="home.label.recommended" /></h5>
+        <h5 class="fw-bold mb-2" id="labelRecommended">추천 친구</h5>
         <div id="recommendedContainer" class="d-flex flex-wrap gap-3 mb-3">
-            <p class="text-muted"><fmt:message key="placeholder.recommendfriends" /></p>
+            <p class="text-muted">과목을 선택하면 추천 친구가 표시됩니다.</p>
         </div>
 
         <div id="warningMessage" class="text-danger fw-bold mb-3"></div>
 
         <div class="d-flex gap-3">
-            <button id="createBtn" class="btn btn-primary px-4" onclick="createStudyGroup()"><fmt:message key="home.button.create" /></button>
+            <button id="createBtn" class="btn btn-primary px-4" onclick="createStudyGroup()">스터디 만들기</button>
             <span id="alreadyJoinedMsg" class="text-danger fw-bold align-self-center" style="display: none;">⚠ 이미 참여중입니다</span>
         </div>
     </div>
@@ -105,17 +102,16 @@
     <div class="section-box">
         <h3 id="titleRandom" class="section-title mb-3">
             <i class="bi bi-shuffle text-primary me-2"></i>
-            <fmt:message key="home.title.random" />
+           랜덤 스터디 그룹 만들기
         </h3>
 
-        <!-- ✅ 유도 문구 추가 -->
         <div class="alert alert-info small text-center mb-4" role="alert">
             🤔 어떤 친구들과 스터디 하게 될까요?<br>
             <strong>과목과 인원을 선택</strong>한 후 <strong>랜덤 생성</strong>을 눌러보세요!
         </div>
 
         <button id="randomBtn" class="btn btn-secondary px-4" data-bs-toggle="modal" data-bs-target="#randomStudyModal">
-            <fmt:message key="home.button.random" />
+            랜덤 생성
         </button>
     </div>
 
@@ -131,9 +127,9 @@
                 </div>
                 <div class="modal-body">
                     <div class="mb-3">
-                        <label for="randomSubject" class="form-label"><fmt:message key="home.subject.select" /></label>
+                        <label for="randomSubject" class="form-label">과목 선택</label>
                         <select class="form-select" id="randomSubject">
-                            <option selected disabled><fmt:message key="home.subject.select" /></option>
+                            <option selected disabled>과목 선택</option>
                             <c:forEach var="subject" items="${subjectList}">
                                 <option value="${subject.subject}">${subject.subject}</option>
                             </c:forEach>

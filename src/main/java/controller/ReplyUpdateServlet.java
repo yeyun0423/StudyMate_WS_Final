@@ -9,7 +9,7 @@ import jakarta.servlet.http.*;
 
 import java.io.IOException;
 
-@WebServlet("/ReplyUpdateServlet")
+
 public class ReplyUpdateServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {

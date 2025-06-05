@@ -4,7 +4,7 @@ import dao.UserDAO;
 import dto.UserDTO;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
-import util.SHA256Util;
+import util.PasswordHasher;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -31,7 +31,7 @@ public class RegisterServlet extends HttpServlet {
             UserDTO user = new UserDTO();
             user.setName(name);
             user.setUserId(userId);
-            user.setPassword(SHA256Util.encrypt(password));
+            user.setPassword(PasswordHasher.encrypt(password));
             user.setBirthDate(new SimpleDateFormat("yyyy-MM-dd").parse(birth));
             user.setIsAdmin(isAdmin);
 

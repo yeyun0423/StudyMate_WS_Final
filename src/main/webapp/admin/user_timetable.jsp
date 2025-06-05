@@ -73,7 +73,8 @@
 </head>
 <body>
 <div class="container py-5">
-    <jsp:include page="navbar.jsp" />
+    <jsp:include page="/navbar.jsp" />
+    
 
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-bold">👤 <%= targetUserName %> 님의 시간표</h3>

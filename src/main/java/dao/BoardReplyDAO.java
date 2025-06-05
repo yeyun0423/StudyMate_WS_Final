@@ -104,7 +104,7 @@ public class BoardReplyDAO {
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, postId);
             int affected = pstmt.executeUpdate();
-            return affected > 0; // ✅ 댓글이 있으면 true, 없으면 false
+            return affected > 0; // 댓글이 있으면 true, 없으면 false
         } catch (Exception e) {
             e.printStackTrace();
         } finally {

@@ -29,7 +29,7 @@
     <script>
         <% if (success) { %>
         alert("댓글이 정상적으로 삭제되었습니다.");
-        location.href = "qna_answer_list.jsp";
+        location.href = "<%= request.getContextPath() %>/admin/qna_answer_list.jsp";
         <% } else { %>
         alert("삭제할 답변이 없습니다");
         history.back();
