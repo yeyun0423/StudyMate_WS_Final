@@ -35,9 +35,8 @@ public class ProfileImageUploadServlet extends HttpServlet {
 
         String savedFileName = null;
         if (fileName != null && !fileName.isEmpty()) {
-            // 파일명 중복 방지를 위한 유니크 이름 생성
-            savedFileName = System.currentTimeMillis() + "_" + userId + "_" + fileName;
-            String fullPath = uploadPath + File.separator + savedFileName;
+        	savedFileName = fileName;
+        	String fullPath = uploadPath + File.separator + savedFileName;
 
             // 저장
             filePart.write(fullPath);

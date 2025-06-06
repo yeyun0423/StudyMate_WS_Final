@@ -35,7 +35,6 @@
     <title>StudyMate 홈페이지</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="resources/css/home.css">
     <style>
         * { font-family: 'SUIT', sans-serif; }
         body { background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff); }

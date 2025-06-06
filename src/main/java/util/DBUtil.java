@@ -4,7 +4,7 @@ import java.sql.*;
 
 public class DBUtil {
 
-    private static final String URL = "jdbc:mysql://localhost:3306/StudyMate_WS_final?serverTimezone=Asia/Seoul";
+    private static final String URL = "jdbc:mysql://localhost:3306/FinalDB?serverTimezone=Asia/Seoul";
     private static final String USER = "root";
     private static final String PASSWORD = "Yeyun0423";
 
@@ -26,14 +26,14 @@ public class DBUtil {
         }
     }
 
-    // 1. 모든 리소스 닫는 메서드 - ResultSet, Statement, Connection 모두
+    // 1. ResultSet, Statement, Connection 모두 닫기
     public static void close(ResultSet rs, Statement stmt, Connection conn) {
         try { if (rs != null) rs.close(); } catch (Exception ignored) {}
         try { if (stmt != null) stmt.close(); } catch (Exception ignored) {}
         try { if (conn != null) conn.close(); } catch (Exception ignored) {}
     }
 
-    // 2. ResultSet 뺴고 리소스 닫는 메서드 - Statement, Connection만
+    // 2. ResultSet 제외하고 Statement, Connection만 닫기
     public static void close(Statement stmt, Connection conn) {
         close(null, stmt, conn);
     }

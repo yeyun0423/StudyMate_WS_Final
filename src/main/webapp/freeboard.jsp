@@ -25,7 +25,7 @@
     <link href="https://fonts.googleapis.com/css2?family=SUIT:wght@400;600;700&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        * { font-family: 'SUIT', sans-serif; }
+      * { font-family: 'SUIT', sans-serif; }
         body { background: linear-gradient(to bottom right, #f0f4ff, #e0e7ff); }
         .section-card {
             background: #fff;
@@ -80,6 +80,7 @@
             border: none;
         }
     </style>
+ 
 </head>
 <body>
 <div class="container py-5">
@@ -112,7 +113,7 @@
                     <%= post.getTitle() %>
                 </a></strong>
                 <div class="text-muted small">
-                    <%= post.getWriterName() %> · 댓글 <%= post.getCommentCount() %>개 · 조회수 <%= post.getViews() %>
+                    <%= post.getWriterName() %> · 댓글 <%= post.getCommentCount() %>개 · 보기수 <%= post.getViews() %>
                 </div>
             </div>
             <div class="post-date">
@@ -144,7 +145,6 @@
         </form>
     </div>
 </div>
-<script src="resources/js/lang.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

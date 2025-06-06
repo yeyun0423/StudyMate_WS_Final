@@ -5,7 +5,6 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.*;
 import java.io.*;
 
-
 public class DownloadServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -20,8 +19,15 @@ public class DownloadServlet extends HttpServlet {
 
         // 업로드 경로 설정
         String uploadPath = getServletContext().getRealPath("/upload");
-        File file = new File(uploadPath, filename);
 
+        // 업로드 폴더가 존재하지 않으면 생성
+        File uploadDir = new File(uploadPath);
+        if (!uploadDir.exists()) {
+            uploadDir.mkdirs(); 
+        }
+
+        // 요청한 파일 객체 생성
+        File file = new File(uploadPath, filename);
         if (!file.exists()) {
             response.sendError(HttpServletResponse.SC_NOT_FOUND, "파일이 존재하지 않습니다.");
             return;
@@ -29,8 +35,10 @@ public class DownloadServlet extends HttpServlet {
 
         // 응답 헤더 설정
         response.setContentType("application/octet-stream");
-        response.setHeader("Content-Disposition", 
-            "attachment; filename=\"" + java.net.URLEncoder.encode(filename.substring(filename.indexOf("_") + 1), "UTF-8").replaceAll("\\+", "%20") + "\"");
+        response.setHeader("Content-Disposition",
+                "attachment; filename=\"" +
+                java.net.URLEncoder.encode(filename.substring(filename.indexOf("_") + 1), "UTF-8")
+                        .replaceAll("\\+", "%20") + "\"");
         response.setContentLengthLong(file.length());
 
         // 파일 스트림 처리
@@ -45,4 +53,3 @@ public class DownloadServlet extends HttpServlet {
         }
     }
 }
-
