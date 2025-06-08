@@ -4,18 +4,18 @@
 <%
     request.setCharacterEncoding("UTF-8");
 
-    String uploadPath = application.getRealPath("/upload"); // 실제 서버 경로
+    String uploadPath = application.getRealPath("/upload"); 
     File uploadDir = new File(uploadPath);
     if (!uploadDir.exists()) uploadDir.mkdirs(); // 폴더 없으면 생성
 
-    // ✅ 일반 필드: getParameter() 사용
+   
     String title = request.getParameter("title");
     String content = request.getParameter("content");
     String writer = request.getParameter("writer");
     String filename = "";
 
     try {
-        // ✅ 파일 처리
+        //파일 처리
         Part filePart = request.getPart("uploadFile");
         if (filePart != null && filePart.getSize() > 0) {
             String submittedFileName = filePart.getSubmittedFileName();
@@ -23,7 +23,7 @@
             filePart.write(uploadPath + File.separator + filename);
         }
 
-        // ✅ DTO 저장
+        //DTO 저장
         BoardPostDTO post = new BoardPostDTO();
         post.setBoardType("RESOURCE");
         post.setTitle(title);

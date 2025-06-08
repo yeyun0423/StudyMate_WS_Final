@@ -5,13 +5,12 @@ import java.sql.Timestamp;
 public class BoardCommentDTO {
     private int commentId;         // 댓글 ID
     private int postId;            // 연결된 게시글 ID
-    private String writerId;       // 작성자 ID
-    private String writerName;     // 작성자 이름 (JOIN으로 받아옴)
+    private String writerId;      
+    private String writerName;   
     private String content;        // 댓글 내용
-    private Timestamp createdAt;   // 작성 시각
+    private Timestamp createdAt;  
 
-    // ▶ Getter & Setter
-
+  
     public int getCommentId() {
         return commentId;
     }

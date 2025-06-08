@@ -10,7 +10,7 @@ public class BoardReplyDTO {
     private Timestamp createdAt;
     private String status;
 
-    // Getters & Setters
+
     public int getReplyId() { return replyId; }
     public void setReplyId(int replyId) { this.replyId = replyId; }
 

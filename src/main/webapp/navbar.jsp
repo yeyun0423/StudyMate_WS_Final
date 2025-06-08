@@ -47,13 +47,11 @@
   }
 </style>
 
-<!-- 로고 & 제목 -->
 <div class="d-flex align-items-center mb-3">
     <img src="<%= request.getContextPath() %>/resources/images/studymate logo.png" alt="logo" class="logo-img me-3">
     <h1 class="fw-bold">StudyMate</h1>
 </div>
 
-<!-- 네비게이션 -->
 <nav class="navbar navbar-expand-lg navbar-light mb-4">
     <div class="container-fluid">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 gap-4">

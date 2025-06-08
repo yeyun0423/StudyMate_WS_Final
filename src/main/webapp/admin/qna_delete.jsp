@@ -16,7 +16,7 @@
         return;
     }
 
-    // 파라미터로 받은 postId로 댓글 삭제
+    //댓글 삭제
     int postId = Integer.parseInt(request.getParameter("id"));
     BoardReplyDAO dao = new BoardReplyDAO();
     boolean success = dao.deleteRepliesByPostId(postId);

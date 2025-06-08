@@ -81,15 +81,15 @@
 
 <body>
 <div class="register-card text-center">
-    <!-- 로고 -->
+ 
     <div class="logo-wrapper">
         <img src="resources/images/studymate logo.png" alt="StudyMate Logo" />
     </div>
 
-    <!-- 제목 -->
+  
     <h4 class="fw-bold mb-4">회원가입</h4>
 
-    <!-- 폼 -->
+
     <form action="register" method="post">
         <div class="mb-3">
             <input type="text" name="name" class="form-control" placeholder="이름을 입력하세요." required>
@@ -132,7 +132,7 @@
     </p>
 </div>
 
-<!-- Bootstrap JS -->
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script src="resources/js/register.js"></script>
 </body>

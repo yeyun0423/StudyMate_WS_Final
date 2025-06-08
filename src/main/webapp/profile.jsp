@@ -80,6 +80,7 @@
                          style="width: 200px; height: 200px; object-fit: cover;">
                 </div>
 
+               
                 <form action="<%= request.getContextPath() %>/profileUpload" method="post" enctype="multipart/form-data" class="mb-3">
                     <div class="input-group">
                         <input type="file" class="form-control" name="profileImage" required>
@@ -125,7 +126,7 @@
                     </div>
                 </form>
 
-                <!-- 🔥 회원 탈퇴는 form 분리! -->
+                <!-- 회원 탈퇴는 form-->
                 <form action="<%= request.getContextPath() %>/deleteAccount" method="post"
                       onsubmit="return confirm('정말 탈퇴하시겠습니까?');" class="text-end mt-2">
                     <input type="hidden" name="userId" value="<%= userId %>">

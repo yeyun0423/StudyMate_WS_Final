@@ -3,18 +3,18 @@ package dto;
 import java.util.List;
 
 public class StudyGroupDTO {
-    private String subject;           // 과목명
-    private String leaderName;        // 리더 이름
-    private List<String> memberNames; // 멤버 이름 리스트
-    private String createdAt;         // 생성일 (yyyy-MM-dd HH:mm:ss)
+    private String subject;          
+    private String leaderName;        
+    private List<String> memberNames; 
+    private String createdAt;         
     private int groupId;
     private String leaderId;
     
     
-    // 기본 생성자
+  
     public StudyGroupDTO() {}
 
-    // 전체 필드 생성자
+   
     public StudyGroupDTO(String subject, String leaderName, List<String> memberNames, String createdAt) {
         this.subject = subject;
         this.leaderName = leaderName;
@@ -22,7 +22,6 @@ public class StudyGroupDTO {
         this.createdAt = createdAt;
     }
 
-    // getter/setter
     public String getSubject() {
         return subject;
     }
@@ -71,7 +70,7 @@ public class StudyGroupDTO {
         this.leaderId = leaderId;
     }
 
-    // toString() - 디버깅용
+
     @Override
     public String toString() {
         return "StudyGroupDTO{" +

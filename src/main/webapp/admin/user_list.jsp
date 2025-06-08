@@ -65,7 +65,7 @@
             <% } else { %>
                 <div></div>
             <% } %>
-            <form action="<%= request.getContextPath() %>/admin/users_list.jsp" method="get" class="d-flex">
+            <form action="<%= request.getContextPath() %>/admin/user_list.jsp" method="get" class="d-flex">
                 <input type="text" name="search" class="form-control me-2" style="width: 250px;"
                        placeholder="아이디/이름 검색" value="<%= search != null ? search : "" %>">
                 <button class="btn btn-outline-primary btn-sm">검색</button>
@@ -120,17 +120,17 @@
             <ul class="pagination">
                 <% if (currentpage > 1) { %>
                     <li class="page-item">
-                        <a class="page-link" href="<%= request.getContextPath() %>/admin/users_list.jsp?page=<%= currentpage - 1 %>&search=<%= search != null ? search : "" %>">이전</a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/user_list.jsp?page=<%= currentpage - 1 %>&search=<%= search != null ? search : "" %>">이전</a>
                     </li>
                 <% } %>
                 <% for (int i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= i == currentpage ? "active" : "" %>">
-                        <a class="page-link" href="<%= request.getContextPath() %>/admin/users_list.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>"><%= i %></a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/user_list.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>"><%= i %></a>
                     </li>
                 <% } %>
                 <% if (currentpage < totalPages) { %>
                     <li class="page-item">
-                        <a class="page-link" href="<%= request.getContextPath() %>/admin/users_list.jsp?page=<%= currentpage + 1 %>&search=<%= search != null ? search : "" %>">다음</a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/user_list.jsp?page=<%= currentpage + 1 %>&search=<%= search != null ? search : "" %>">다음</a>
                     </li>
                 <% } %>
             </ul>

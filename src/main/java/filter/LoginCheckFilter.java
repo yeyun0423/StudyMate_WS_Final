@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 
 public class LoginCheckFilter implements Filter {
+
+    // 사용자가 로그인을 했는지 확인하고, 안 했으면 접근 못 하게 막는 필터
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
             throws IOException, ServletException {
@@ -19,28 +21,30 @@ public class LoginCheckFilter implements Filter {
         String uri = req.getRequestURI();
         System.out.println("[LoginCheckFilter] uri = " + uri);
 
-        //  1. 정적 자원은 무조건 통과 
+        // css, js, 이미지 같은 정적 파일들은 필터하지 않음
         if (uri.matches(".*\\.(css|js|png|jpg|jpeg|gif|woff|woff2|ttf|svg|eot)$")
                 || uri.contains("/resources/")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // 2. 로그인/회원가입 페이지는 통과
+        // 로그인이나 회원가입 관련된 요청도 막으면 안 되니까 통과
         if (uri.endsWith("login.jsp") || uri.endsWith("register.jsp")
                 || uri.contains("/login") || uri.contains("/register")) {
             chain.doFilter(request, response);
             return;
         }
 
-        // 3. 로그인 체크
+        // 세션에 userId가 있으면 로그인 
         boolean isLoggedIn = session != null && session.getAttribute("userId") != null;
+
+        // 로그인 안 한 사람은 로그인 페이지로 돌려보냄
         if (!isLoggedIn) {
             res.sendRedirect(req.getContextPath() + "/login.jsp?error=notloggedin");
             return;
         }
 
-        // 4. 나머지는 통과
+        // 로그인 한 사람은 그냥 계속 진행
         chain.doFilter(request, response);
     }
 }

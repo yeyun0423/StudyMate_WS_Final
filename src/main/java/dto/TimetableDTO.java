@@ -7,7 +7,7 @@ public class TimetableDTO {
     private int period;
     private String subject;
 
-    // Getters and Setters
+
     public int getTimetableId() { return timetableId; }
     public void setTimetableId(int timetableId) { this.timetableId = timetableId; }
 

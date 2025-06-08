@@ -290,5 +290,25 @@
     <servlet-name>StudyGroupServlet</servlet-name>
     <url-pattern>/StudyGroupServlet</url-pattern>
   </servlet-mapping>
+  
+ <!-- 에러페이지 -->
+<error-page>
+    <error-code>401</error-code>
+    <location>/exceptionNoLogin.jsp</location>
+</error-page>
 
+<error-page>
+    <error-code>403</error-code>
+    <location>/exceptionNoAdmin.jsp</location>
+</error-page>
+
+<error-page>
+    <error-code>404</error-code>
+    <location>/exceptionNoPage.jsp</location>
+</error-page>
+
+<error-page>
+    <error-code>500</error-code>
+    <location>/exceptionServerError.jsp</location>
+</error-page>
 </web-app>

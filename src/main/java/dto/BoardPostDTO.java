@@ -3,14 +3,14 @@ package dto;
 import java.sql.Timestamp;
 
 public class BoardPostDTO {
-    private int postId;            // 글 번호 (PK)
-    private String boardType;      // 게시판 타입: FREE, RESOURCE 등
-    private String writerId;       // 작성자 ID
-    private String writerName;     // 작성자 이름 (join 결과)
-    private String title;          // 글 제목
-    private String content;        // 글 내용
-    private String filename;       // 첨부파일 이름
-    private Timestamp createdAt;   // 작성일시
+    private int postId;            
+    private String boardType;    
+    private String writerId;       
+    private String writerName;   
+    private String title;         
+    private String content;      
+    private String filename;      
+    private Timestamp createdAt;   
     private boolean isPrivate;
     private String status; // Q&A 답변 상태 
     private int views;

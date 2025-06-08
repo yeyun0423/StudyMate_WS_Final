@@ -72,12 +72,12 @@
 
 <body>
     <div class="login-card">
-        <!-- 로고 -->
+       
         <div class="logo-wrapper">
             <img src="<%= request.getContextPath() %>/resources/images/studymate logo.png" alt="StudyMate Logo" />
         </div>
 
-        <!-- 로그인 타이틀 -->
+        
         <h4 class="text-center fw-bold mb-4">로그인</h4>
 
         <!-- 로그인 폼 -->
@@ -91,13 +91,12 @@
             <button type="submit" class="btn btn-primary w-100">로그인</button>
         </form>
 
-        <!-- 회원가입 링크 -->
+        <!-- 회원가입 이동-->
         <p class="form-text text-center mt-4">
             계정이 없으신가요? <a href="register.jsp">회원가입</a>
         </p>
     </div>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

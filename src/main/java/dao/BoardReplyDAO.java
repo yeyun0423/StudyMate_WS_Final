@@ -5,9 +5,10 @@ import dto.BoardReplyDTO;
 import util.DBUtil;
 import java.sql.*;
 import java.util.*;
-import util.DBUtil;
 
 public class BoardReplyDAO {
+
+    // 댓글 등록
     public void insertReply(BoardReplyDTO reply) {
         String sql = "INSERT INTO board_reply(post_id, writer_id, content, created_at) VALUES (?, ?, ?, NOW())";
         try (Connection conn = DBUtil.getConnection();
@@ -21,6 +22,7 @@ public class BoardReplyDAO {
         }
     }
 
+    // 게시글 번호로 해당 글의 모든 댓글 불러오기 (작성 순서대로)
     public List<BoardReplyDTO> getRepliesByPostId(int postId) {
         List<BoardReplyDTO> list = new ArrayList<>();
         String sql = "SELECT * FROM board_reply WHERE post_id = ? ORDER BY created_at ASC";
@@ -43,7 +45,8 @@ public class BoardReplyDAO {
         }
         return list;
     }
-    
+
+    // Q&A 게시글 목록 가져오면서 답변 여부 상태도 같이 조회
     public List<BoardPostDTO> getQnaPostsWithStatus() {
         List<BoardPostDTO> list = new ArrayList<>();
         String sql = """
@@ -61,12 +64,12 @@ public class BoardReplyDAO {
             WHERE p.board_type = 'Q&A'
             GROUP BY p.post_id
             ORDER BY p.created_at DESC
-            """;
+        """;
 
         try (Connection conn = DBUtil.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql);
              ResultSet rs = pstmt.executeQuery()) {
-            
+
             while (rs.next()) {
                 BoardPostDTO post = new BoardPostDTO();
                 post.setPostId(rs.getInt("post_id"));
@@ -82,8 +85,7 @@ public class BoardReplyDAO {
         return list;
     }
 
-
-    
+    // 댓글 하나만 삭제
     public void deleteReplyById(int replyId) {
         String sql = "DELETE FROM board_reply WHERE reply_id = ?";
         try (Connection conn = DBUtil.getConnection();
@@ -94,7 +96,8 @@ public class BoardReplyDAO {
             e.printStackTrace();
         }
     }
-    
+
+    // 게시글 하나에 달린 모든 댓글 삭제
     public boolean deleteRepliesByPostId(int postId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -104,7 +107,7 @@ public class BoardReplyDAO {
             pstmt = conn.prepareStatement(sql);
             pstmt.setInt(1, postId);
             int affected = pstmt.executeUpdate();
-            return affected > 0; // 댓글이 있으면 true, 없으면 false
+            return affected > 0;
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -112,7 +115,8 @@ public class BoardReplyDAO {
         }
         return false;
     }
-    
+
+    // 댓글 내용 수정
     public boolean updateReply(BoardReplyDTO reply) {
         String sql = "UPDATE board_reply SET content = ? WHERE reply_id = ?";
         try (Connection conn = DBUtil.getConnection();
@@ -126,5 +130,4 @@ public class BoardReplyDAO {
         }
         return false;
     }
-
-}  
+}

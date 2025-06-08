@@ -4,8 +4,8 @@
     request.setCharacterEncoding("UTF-8");
 
     String search = request.getParameter("search");
-    String sort = request.getParameter("sort"); // subject or date
-    String order = request.getParameter("order"); // asc or desc
+    String sort = request.getParameter("sort"); 
+    String order = request.getParameter("order");
     int currentPage = request.getParameter("page") == null ? 1 : Integer.parseInt(request.getParameter("page"));
     int limit = 5;
 
@@ -13,7 +13,6 @@
     List<StudyGroupDTO> allGroups = dao.getAllStudyGroupsWithMembers();
     int totalGroups = allGroups.size();
 
-    // 과목별 통계 요약 계산
     Map<String, Integer> subjectCountMap = new HashMap<>();
     for (StudyGroupDTO g : allGroups) {
         subjectCountMap.put(g.getSubject(), subjectCountMap.getOrDefault(g.getSubject(), 0) + 1);
@@ -28,7 +27,6 @@
         filteredGroups = new ArrayList<>(allGroups);
     }
 
-    // 정렬
     if ("subject".equals(sort)) {
         filteredGroups.sort(Comparator.comparing(StudyGroupDTO::getSubject));
     } else if ("date".equals(sort)) {
@@ -89,22 +87,22 @@
         <!-- 검색창 + 전체 목록 버튼 -->
         <div class="d-flex justify-content-between align-items-center mb-3">
             <% if (search != null && !search.trim().isEmpty()) { %>
-                <a href="matchlist.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
+                <a href="<%= request.getContextPath() %>/admin/matchlist.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
             <% } else { %>
                 <div></div>
             <% } %>
-            <form action="matchlist.jsp" method="get" class="d-flex">
+            <form action="<%= request.getContextPath() %>/admin/matchlist.jsp" method="get" class="d-flex">
                 <input type="text" name="search" class="form-control me-2" style="width: 250px;"
                        placeholder="과목명 검색" value="<%= search != null ? search : "" %>">
                 <button class="btn btn-outline-primary btn-sm">검색</button>
             </form>
         </div>
 
-        <!-- 정렬 옵션 -->
+        <!-- 정렬 -->
         <div class="d-flex justify-content-end mb-2">
-            <a href="matchlist.jsp?sort=subject&order=asc" class="btn btn-outline-dark btn-sm me-2">과목 오름차순</a>
-            <a href="matchlist.jsp?sort=subject&order=desc" class="btn btn-outline-dark btn-sm me-2">과목 내림차순</a>
-            <a href="matchlist.jsp?sort=date&order=desc" class="btn btn-outline-dark btn-sm">최신순</a>
+            <a href="<%= request.getContextPath() %>/admin/matchlist.jsp?sort=subject&order=asc" class="btn btn-outline-dark btn-sm me-2">과목 오름차순</a>
+            <a href="<%= request.getContextPath() %>/admin/matchlist.jsp?sort=subject&order=desc" class="btn btn-outline-dark btn-sm me-2">과목 내림차순</a>
+            <a href="<%= request.getContextPath() %>/admin/matchlist.jsp?sort=date&order=desc" class="btn btn-outline-dark btn-sm">최신순</a>
         </div>
 
         <!-- 테이블 -->
@@ -140,17 +138,17 @@
             <ul class="pagination">
                 <% if (currentPage > 1) { %>
                     <li class="page-item">
-                        <a class="page-link" href="matchlist.jsp?page=<%= currentPage - 1 %>&search=<%= search != null ? search : "" %>&sort=<%= sort != null ? sort : "" %>&order=<%= order != null ? order : "" %>">이전</a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/matchlist.jsp?page=<%= currentPage - 1 %>&search=<%= search != null ? search : "" %>&sort=<%= sort != null ? sort : "" %>&order=<%= order != null ? order : "" %>">이전</a>
                     </li>
                 <% } %>
                 <% for (int i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= i == currentPage ? "active" : "" %>">
-                        <a class="page-link" href="matchlist.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>&sort=<%= sort != null ? sort : "" %>&order=<%= order != null ? order : "" %>"><%= i %></a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/matchlist.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>&sort=<%= sort != null ? sort : "" %>&order=<%= order != null ? order : "" %>"><%= i %></a>
                     </li>
                 <% } %>
                 <% if (currentPage < totalPages) { %>
                     <li class="page-item">
-                        <a class="page-link" href="matchlist.jsp?page=<%= currentPage + 1 %>&search=<%= search != null ? search : "" %>&sort=<%= sort != null ? sort : "" %>&order=<%= order != null ? order : "" %>">다음</a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/matchlist.jsp?page=<%= currentPage + 1 %>&search=<%= search != null ? search : "" %>&sort=<%= sort != null ? sort : "" %>&order=<%= order != null ? order : "" %>">다음</a>
                     </li>
                 <% } %>
             </ul>

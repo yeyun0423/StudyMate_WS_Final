@@ -1,7 +1,7 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page import="dao.UserDAO" %>
 <%
-    // ✅ 로그인 여부 및 관리자 권한 체크
+    // 로그인 여부 및 관리자 권한 체크
     String loginUserId = (String) session.getAttribute("userId");
     Boolean isAdmin = (Boolean) session.getAttribute("isAdmin");
 
@@ -10,17 +10,17 @@
         return;
     }
 
-    // ✅ 삭제할 대상 유저 ID
+    // 삭제할 대상 유저 ID
     String targetUserId = request.getParameter("userId");
     if (targetUserId == null || targetUserId.trim().isEmpty()) {
         response.sendRedirect("user_list.jsp");
         return;
     }
 
-    // ✅ DAO를 통해 관련 데이터 삭제
+    // DAO를 통해 관련 데이터 삭제
     UserDAO dao = new UserDAO();
-    dao.deleteAllUserData(targetUserId); // 게시글, 시간표 등 삭제
-    dao.deleteUser(targetUserId);        // 최종적으로 user 테이블에서 삭제
+    dao.deleteAllUserData(targetUserId); 
+    dao.deleteUser(targetUserId);       
 
     response.sendRedirect("user_list.jsp?message=deleted");
 %>

@@ -99,12 +99,12 @@
 
         <!-- 검색 + 전체 보기 -->
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <form action="qna_answer_list.jsp" method="get" class="d-flex">
+            <form action="<%= request.getContextPath() %>/admin/qna_answer_list.jsp" method="get" class="d-flex">
                 <input type="text" name="search" class="form-control form-control-sm me-2" style="width: 250px;" placeholder="작성자 또는 제목 검색" value="<%= search != null ? search : "" %>">
                 <button class="btn btn-outline-primary btn-sm">검색</button>
             </form>
             <% if (search != null && !search.trim().isEmpty()) { %>
-                <a href="qna_answer_list.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
+                <a href="<%= request.getContextPath() %>/admin/qna_answer_list.jsp" class="btn btn-secondary btn-sm">전체 목록 보기</a>
             <% } %>
         </div>
 
@@ -140,11 +140,10 @@
                         <%= status %>
                     </td>
                     <td>
-    <a href="<%= request.getContextPath() %>/qna_edit.jsp?id=<%= post.getPostId() %>" class="btn btn-warning btn-sm" title="답변 수정">수정</a>
-    <a href="<%= request.getContextPath() %>/admin/qna_delete.jsp?id=<%= post.getPostId() %>" class="btn btn-danger btn-sm" title="답변 삭제"
-       <%= answered ? "onclick=\"return confirmDelete();\"" : "" %>>삭제</a>
-</td>
-                    
+                        <a href="<%= request.getContextPath() %>/qna_edit.jsp?id=<%= post.getPostId() %>" class="btn btn-warning btn-sm" title="답변 수정">수정</a>
+                        <a href="<%= request.getContextPath() %>/admin/qna_delete.jsp?id=<%= post.getPostId() %>" class="btn btn-danger btn-sm" title="답변 삭제"
+                           <%= answered ? "onclick=\"return confirmDelete();\"" : "" %>>삭제</a>
+                    </td>
                 </tr>
             <% } %>
             </tbody>
@@ -154,15 +153,19 @@
         <nav class="mt-4 d-flex justify-content-center">
             <ul class="pagination">
                 <% if (currentpage > 1) { %>
-                    <li class="page-item"><a class="page-link" href="user_list.jsp?page=<%= currentpage - 1 %>&search=<%= search != null ? search : "" %>">이전</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/qna_answer_list.jsp?page=<%= currentpage - 1 %>&search=<%= search != null ? search : "" %>">이전</a>
+                    </li>
                 <% } %>
                 <% for (int i = 1; i <= totalPages; i++) { %>
                     <li class="page-item <%= i == currentpage ? "active" : "" %>">
-                        <a class="page-link" href="user_list.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>"><%= i %></a>
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/qna_answer_list.jsp?page=<%= i %>&search=<%= search != null ? search : "" %>"><%= i %></a>
                     </li>
                 <% } %>
                 <% if (currentpage < totalPages) { %>
-                    <li class="page-item"><a class="page-link" href="user_list.jsp?page=<%= currentpage + 1 %>&search=<%= search != null ? search : "" %>">다음</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="<%= request.getContextPath() %>/admin/qna_answer_list.jsp?page=<%= currentpage + 1 %>&search=<%= search != null ? search : "" %>">다음</a>
+                    </li>
                 <% } %>
             </ul>
         </nav>
