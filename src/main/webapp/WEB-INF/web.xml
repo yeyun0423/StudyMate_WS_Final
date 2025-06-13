@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                             https://jakarta.ee/xml/ns/jakartaee/web-app_5_0.xsd"
+         version="5.0">
+         
+  <!-- 로그인 -->
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+</welcome-file-list>
+  
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>controller.LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
+  </servlet-mapping>
+
+  <!-- 회원가입 -->
+  <servlet>
+    <servlet-name>RegisterServlet</servlet-name>
+    <servlet-class>controller.RegisterServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
+    <url-pattern>/register</url-pattern>
+  </servlet-mapping>
+
+  <!-- 관리자 코드 -->
+  <context-param>
+    <param-name>adminCode</param-name>
+    <param-value>1234</param-value>
+  </context-param>
+
+  <!-- 아이디 중복 확인 -->
+  <servlet>
+    <servlet-name>CheckIdServlet</servlet-name>
+    <servlet-class>controller.CheckIdServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CheckIdServlet</servlet-name>
+    <url-pattern>/check-id</url-pattern>
+  </servlet-mapping>
+
+  <!-- UTF-8 필터 -->
+  <filter>
+    <filter-name>EncodingFilter</filter-name>
+    <filter-class>filter.EncodingFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>EncodingFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <!-- 관리자 전용 접근 필터 -->
+  <filter>
+    <filter-name>AdminAccessFilter</filter-name>
+    <filter-class>filter.AdminAccessFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>AdminAccessFilter</filter-name>
+    <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
+  
+    <!-- 로그인 체크 필터 -->
+    <filter>
+  <filter-name>LoginCheckFilter</filter-name>
+  <filter-class>filter.LoginCheckFilter</filter-class>
+</filter>
+<filter-mapping>
+  <filter-name>LoginCheckFilter</filter-name>
+  <url-pattern>/*</url-pattern>
+</filter-mapping>    
+
+  <!-- 언어 전환 -->
+<servlet>
+  <servlet-name>ChangeLangServlet</servlet-name>
+  <servlet-class>controller.ChangeLangServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>ChangeLangServlet</servlet-name>
+  <url-pattern>/changeLang</url-pattern>
+</servlet-mapping>
+  
+
+  <!-- 시간표 등록 -->
+  <servlet>
+    <servlet-name>TimetableServlet</servlet-name>
+    <servlet-class>controller.TimetableServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>TimetableServlet</servlet-name>
+    <url-pattern>/timetable</url-pattern>
+  </servlet-mapping>
+
+  <!-- 프로필 수정 -->
+  <servlet>
+    <servlet-name>ProfileUpdateServlet</servlet-name>
+    <servlet-class>controller.ProfileUpdateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileUpdateServlet</servlet-name>
+    <url-pattern>/updateProfile</url-pattern>
+  </servlet-mapping>
+
+  <!-- 프로필 이미지 업로드 -->
+  <servlet>
+    <servlet-name>ProfileImageUploadServlet</servlet-name>
+    <servlet-class>controller.ProfileImageUploadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileImageUploadServlet</servlet-name>
+    <url-pattern>/profileUpload</url-pattern>
+  </servlet-mapping>
+
+  <!-- 프로필 이미지 삭제 -->
+  <servlet>
+    <servlet-name>ProfileImageDeleteServlet</servlet-name>
+    <servlet-class>controller.ProfileImageDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ProfileImageDeleteServlet</servlet-name>
+    <url-pattern>/deleteImage</url-pattern>
+  </servlet-mapping>
+
+  <!-- JSP 처리 -->
+  <servlet>
+    <servlet-name>jsp</servlet-name>
+    <servlet-class>org.apache.jasper.servlet.JspServlet</servlet-class>
+    <init-param>
+      <param-name>fork</param-name>
+      <param-value>false</param-value>
+    </init-param>
+    <multipart-config>
+      <max-file-size>10485760</max-file-size>
+      <max-request-size>52428800</max-request-size>
+      <file-size-threshold>1024</file-size-threshold>
+    </multipart-config>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>jsp</servlet-name>
+    <url-pattern>*.jsp</url-pattern>
+  </servlet-mapping>
+
+  <!-- 정적 리소스 -->
+  <servlet-mapping>
+    <servlet-name>default</servlet-name>
+    <url-pattern>/resources/*</url-pattern>
+  </servlet-mapping>
+
+  <!-- MIME 설정 -->
+  <mime-mapping>
+    <extension>css</extension>
+    <mime-type>text/css</mime-type>
+  </mime-mapping>
+  <mime-mapping>
+    <extension>js</extension>
+    <mime-type>application/javascript</mime-type>
+  </mime-mapping>
+
+  <!-- 회원탈퇴 -->
+  <servlet>
+    <servlet-name>DeleteAccountServlet</servlet-name>
+    <servlet-class>controller.DeleteAccountServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DeleteAccountServlet</servlet-name>
+    <url-pattern>/deleteAccount</url-pattern>
+  </servlet-mapping>
+
+  <!-- 파일 다운로드 -->
+  <servlet>
+    <servlet-name>DownloadServlet</servlet-name>
+    <servlet-class>controller.DownloadServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>DownloadServlet</servlet-name>
+    <url-pattern>/DownloadServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 자유게시판 댓글 -->
+  <servlet>
+    <servlet-name>FreeboardCommentServlet</servlet-name>
+    <servlet-class>controller.FreeboardCommentServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>FreeboardCommentServlet</servlet-name>
+    <url-pattern>/FreeboardCommentServlet</url-pattern>
+  </servlet-mapping>
+  
+  <!-- 추천 친구 목록 조회 -->
+<servlet>
+  <servlet-name>FriendRecommendationServlet</servlet-name>
+  <servlet-class>controller.FriendRecommendationServlet</servlet-class>
+</servlet>
+<servlet-mapping>
+  <servlet-name>FriendRecommendationServlet</servlet-name>
+  <url-pattern>/getRecommendedFriends</url-pattern>
+</servlet-mapping>
+
+  <!-- 로그아웃 -->
+  <servlet>
+    <servlet-name>LogoutServlet</servlet-name>
+    <servlet-class>controller.LogoutServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LogoutServlet</servlet-name>
+    <url-pattern>/logout</url-pattern>
+  </servlet-mapping>
+
+  <!-- QnA 글 작성 -->
+  <servlet>
+    <servlet-name>QnABoardWriteServlet</servlet-name>
+    <servlet-class>controller.QnABoardWriteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>QnABoardWriteServlet</servlet-name>
+    <url-pattern>/QnABoardWriteServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 랜덤 스터디 생성 -->
+  <servlet>
+    <servlet-name>RandomStudyServlet</servlet-name>
+    <servlet-class>controller.RandomStudyServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>RandomStudyServlet</servlet-name>
+    <url-pattern>/RandomStudyServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 댓글 삭제 -->
+  <servlet>
+    <servlet-name>ReplyDeleteServlet</servlet-name>
+    <servlet-class>controller.ReplyDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReplyDeleteServlet</servlet-name>
+    <url-pattern>/ReplyDeleteServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 댓글 추가 -->
+  <servlet>
+    <servlet-name>ReplyInsertServlet</servlet-name>
+    <servlet-class>controller.ReplyInsertServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReplyInsertServlet</servlet-name>
+    <url-pattern>/ReplyInsertServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 댓글 수정 -->
+  <servlet>
+    <servlet-name>ReplyUpdateServlet</servlet-name>
+    <servlet-class>controller.ReplyUpdateServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ReplyUpdateServlet</servlet-name>
+    <url-pattern>/ReplyUpdateServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 스터디 삭제 -->
+  <servlet>
+    <servlet-name>StudyDeleteServlet</servlet-name>
+    <servlet-class>controller.StudyDeleteServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StudyDeleteServlet</servlet-name>
+    <url-pattern>/StudyDeleteServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 스터디 나가기 -->
+  <servlet>
+    <servlet-name>StudyExitServlet</servlet-name>
+    <servlet-class>controller.StudyExitServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StudyExitServlet</servlet-name>
+    <url-pattern>/StudyExitServlet</url-pattern>
+  </servlet-mapping>
+
+  <!-- 스터디 그룹 상세보기 -->
+  <servlet>
+    <servlet-name>StudyGroupServlet</servlet-name>
+    <servlet-class>controller.StudyGroupServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StudyGroupServlet</servlet-name>
+    <url-pattern>/StudyGroupServlet</url-pattern>
+  </servlet-mapping>
+  
+ <!-- 에러페이지 -->
+<error-page>
+    <error-code>401</error-code>
+    <location>/exceptionNoLogin.jsp</location>
+</error-page>
+
+<error-page>
+    <error-code>403</error-code>
+    <location>/exceptionNoAdmin.jsp</location>
+</error-page>
+
+<error-page>
+    <error-code>404</error-code>
+    <location>/exceptionNoPage.jsp</location>
+</error-page>
+
+<error-page>
+    <error-code>500</error-code>
+    <location>/exceptionServerError.jsp</location>
+</error-page>
+</web-app>
