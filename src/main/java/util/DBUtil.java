@@ -6,7 +6,7 @@ public class DBUtil {
 
     private static final String URL = "jdbc:mysql://localhost:3306/FinalDB?serverTimezone=Asia/Seoul";
     private static final String USER = "root";
-    private static final String PASSWORD = "1234";
+    private static final String PASSWORD = "Hyj040811!";
 
     static {
         try {
