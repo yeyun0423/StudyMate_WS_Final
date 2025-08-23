@@ -6,7 +6,7 @@
 👉 [시연 영상 보러가기](https://drive.google.com/file/d/1ImAXeBCcJOMwhJyBh471KpPjKdo5kg3J/view?usp=sharing)
 
 ## 📊 ERD
-👉[ERD](docs/erd.png)
+👉 [ERD](docs/erd.png)
 
 ## ✨ 프로젝트 소개
 **StudyMate_WS_Final**은 대학생들의 과목별 스터디 그룹 생성/참여를 돕는 웹 애플리케이션입니다.  
